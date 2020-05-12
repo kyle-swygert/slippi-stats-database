@@ -1,0 +1,15 @@
+C:\Users\Kyle\Desktop\personalProjects\slippi-stats-database\database-app\Slippi Stats Database App\Slippi Stats Database App\bin\Debug\Slippi Stats Database App.exe.config
+C:\Users\Kyle\Desktop\personalProjects\slippi-stats-database\database-app\Slippi Stats Database App\Slippi Stats Database App\bin\Debug\Slippi Stats Database App.exe
+C:\Users\Kyle\Desktop\personalProjects\slippi-stats-database\database-app\Slippi Stats Database App\Slippi Stats Database App\bin\Debug\Slippi Stats Database App.pdb
+C:\Users\Kyle\Desktop\personalProjects\slippi-stats-database\database-app\Slippi Stats Database App\Slippi Stats Database App\obj\Debug\Slippi Stats Database App.csprojAssemblyReference.cache
+C:\Users\Kyle\Desktop\personalProjects\slippi-stats-database\database-app\Slippi Stats Database App\Slippi Stats Database App\obj\Debug\MainWindow.g.cs
+C:\Users\Kyle\Desktop\personalProjects\slippi-stats-database\database-app\Slippi Stats Database App\Slippi Stats Database App\obj\Debug\App.g.cs
+C:\Users\Kyle\Desktop\personalProjects\slippi-stats-database\database-app\Slippi Stats Database App\Slippi Stats Database App\obj\Debug\Slippi Stats Database App_MarkupCompile.cache
+C:\Users\Kyle\Desktop\personalProjects\slippi-stats-database\database-app\Slippi Stats Database App\Slippi Stats Database App\obj\Debug\Slippi Stats Database App_MarkupCompile.lref
+C:\Users\Kyle\Desktop\personalProjects\slippi-stats-database\database-app\Slippi Stats Database App\Slippi Stats Database App\obj\Debug\MainWindow.baml
+C:\Users\Kyle\Desktop\personalProjects\slippi-stats-database\database-app\Slippi Stats Database App\Slippi Stats Database App\obj\Debug\Slippi Stats Database App.g.resources
+C:\Users\Kyle\Desktop\personalProjects\slippi-stats-database\database-app\Slippi Stats Database App\Slippi Stats Database App\obj\Debug\Slippi_Stats_Database_App.Properties.Resources.resources
+C:\Users\Kyle\Desktop\personalProjects\slippi-stats-database\database-app\Slippi Stats Database App\Slippi Stats Database App\obj\Debug\Slippi Stats Database App.csproj.GenerateResource.cache
+C:\Users\Kyle\Desktop\personalProjects\slippi-stats-database\database-app\Slippi Stats Database App\Slippi Stats Database App\obj\Debug\Slippi Stats Database App.csproj.CoreCompileInputs.cache
+C:\Users\Kyle\Desktop\personalProjects\slippi-stats-database\database-app\Slippi Stats Database App\Slippi Stats Database App\obj\Debug\Slippi Stats Database App.exe
+C:\Users\Kyle\Desktop\personalProjects\slippi-stats-database\database-app\Slippi Stats Database App\Slippi Stats Database App\obj\Debug\Slippi Stats Database App.pdb
