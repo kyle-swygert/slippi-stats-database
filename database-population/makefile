@@ -1,6 +1,6 @@
 build-wsl-release:
 	# command to build the release as a package. 
-	pyinstaller.exe --noconsole rename-gui-qt.py --onefile --name Slippi-File-Rename
+	pyinstaller.exe --noconsole populateDB-gui-qt.py --onefile --name Slippi-DB-Populate
 
 build-linux-release:
-	pyinstaller --noconsole rename-gui-qt.py --onefile --name Slippi-File-Rename
+	pyinstaller --noconsole populateDB-gui-qt.py --onefile --name Slippi-DB-Populate
