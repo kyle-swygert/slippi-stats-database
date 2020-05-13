@@ -11,8 +11,18 @@
 from slippi import *
 from os import walk, listdir, rename, path
 import psycopg2
+import uuid
 
-conn = None
+conn = psycopg2.connect("dbname='SlippiStats' user='postgres' host='localhost' password='admin'")
+cur = conn.cursor()
+
+numFiles = 0
+
+teamDict = {
+    0: "Red",
+    1: "Blue",
+    2: "Green"
+}
 
 def connect_to_database():
     hostname='localhost'
@@ -27,18 +37,65 @@ def connect_to_database():
 
         conn = psycopg2.connect("dbname='SlippiStats' user='postgres' host='localhost' password='admin'")
 
+        cur = conn.cursor()
+
         return True
 
     except:
         print("Could Not Connect to Database...")
         return False
 
+def didWinGame(slippiGame, playerPort):
+    # This function will accept a slippi game object, and a player port int that represents the port of the player that is to be checked for the win condition. 
 
+    # build list of ports that were used in the current game
+
+    #curPort = 0
+
+    #portsUsed = []
+   
+
+    lastFrame = slippiGame.frames[-1]
+    
+    playerPortPostFrameStocks = lastFrame.ports[playerPort].leader.post.stocks
+
+    return playerPortPostFrameStocks > 0
+
+'''
+
+    for player in lastFrame.ports:
+
+        if player is not None:
+            # add the current index to the list. 
+
+            portsUsed.append(curPort)
+
+        # increment curPort every time no matter if the port is used or not. 
+        curPort += 1
+
+
+    for port in portsUsed:
+
+        
+
+        if lastFrame.ports[playerPort] >= lastFrame.ports[port] and playerPort != port:
+            pass
+        else:
+            return False
+
+    return True
+'''
 
 def get_datetime(slippiFileName):
     return slippiFileName.split('_')[-1].split('.')[0]
 
 def insert_data_into_database(slippiFileName):
+
+    
+
+
+    conn = psycopg2.connect("dbname='SlippiStats' user='postgres' host='localhost' password='admin'")
+    cur = conn.cursor()
 
     # NOTE: this function will run everytime that a file is to be inserted into the database. 
 
@@ -93,31 +150,12 @@ def insert_data_into_database(slippiFileName):
 
         gameType = ""
 
+        tempTime = slippiGame.metadata.date
 
-        # TODO: insert the game information into the database
-        # Build the sql string command to insert into the database. 
-        insertStr = "INSERT INTO "
-
-
-
-
-
-
-
-
-
-
+        #print(f"temptime: {tempTime}")
         
-        tempTime = get_datetime(slippiFileName)
-        #print(f'temptime: {tempTime}')
-
-        #print("inside try statement")
-
         if slippiGame.start.is_teams == True:
-            #print('teams game')
-            #newFile = generate_doubles_game_name(slippiGame)
-            #print('made doubles name')
-
+            
             gameType = "Teams"
 
         else: # could be singles or FFA
@@ -129,34 +167,30 @@ def insert_data_into_database(slippiFileName):
 
             #print(f'players in game: {curPlayerCount}')
             if curPlayerCount == 2:
-                #newFile = generate_singles_game_name(slippiGame)
-                #print('made singles name')
-
+                
                 gameType = "Singles"
 
             else:
-                #newFile = generate_free_for_all_game_name(slippiGame)
-                # print('made FFA name')
+                
                 gameType = "FFA"
 
+        # TODO: Get the date and time into a format that is able to be used as the time and date format for postgreSQL in the DB. 
 
 
-        #newFile += '_' + tempTime
-        #newFile += '.slp'
+        # generate unique string for the match
+        matchID = str(uuid.uuid4())
 
-        #print(f'GENERATE FILENAME FILE: {newFile}')
 
-        # TODO: Left off here. Write the insert statements to populate the database with the proper information. 
-
-        dateTime = tempTime.split('T')
-
-        date = dateTime[0]
-        time = dateTime[1]
-
-        print(f"Insert {slippiFileName} into the database.")
-        print(f"insert data: gametype: {gameType}, stage: {slippiGame.start.stage.__dict__['_name_']}, date: {date}, time: {time}")
+        #print(f"Insert {slippiFileName} into the database.")
+        #print(f"insert data: uuid: {matchID}, gametype: {gameType}, stage: {slippiGame.start.stage.__dict__['_name_']}, date: {date}, time: {time}")
         #print(f"stage stuff: {slippiGame.start.stage.__dict__}")
-        print(f"INSERT NOT IMPLEMENTED YET!!!!!")
+
+        stageName = str( slippiGame.start.stage.__dict__['_name_'])
+        stageID = str( slippiGame.start.stage.__dict__['_value_'])
+
+        fileName = slippiFileName.split('/')[-1]
+
+        #print(f"INSERT NOT IMPLEMENTED YET!!!!!")
         
         '''
         match data to insert into the DB:
@@ -171,8 +205,30 @@ def insert_data_into_database(slippiFileName):
 
         '''
     
-        # TODO: Iterate through the players in the match and insert that data into the database as well. 
 
+        matchInsert = f"INSERT INTO match(matchID, stageName, stageID, matchdate, gameType, filename) VALUES('{matchID}', '{stageName}', {stageID}, TIMESTAMP '{tempTime}', '{gameType}', '{fileName}');"
+
+        #print(matchInsert)
+
+        try: 
+
+            #print("before match insert")
+
+                    
+            conn = psycopg2.connect("dbname='SlippiStats' user='postgres' host='localhost' password='admin'")
+            cur = conn.cursor()
+
+            # insert the match data into the database. 
+            cur.execute(matchInsert)
+            conn.commit()
+
+            #print("after match insert")
+
+        except Exception as e:
+            print(e)
+            print("Insert into match failed...")
+
+       
         '''
         character data to insert into the DB:
 
@@ -187,15 +243,56 @@ def insert_data_into_database(slippiFileName):
 
         '''
 
-        print(f"charaters in the current game:")
+        #print(f"charaters in the current game:")
+
+        curPort = 0
 
         for player in slippiGame.start.players:
 
             if player is not None:     
 
-                print(f"name: {player.character.__dict__['_name_']}, color: {player.costume}, tag: {player.tag}")
+                #print(f"name: {player.character.__dict__['_name_']}, color: {player.costume}, tag: {player.tag}")
+
+                charName = player.character.__dict__['_name_']
+                #charID = player.character.__dict__['_value_']
+
+                charID = str(uuid.uuid4()) # create a unique ID for each character that is in the database. 
+
+                didWin = True # This is always set true for now, i think there is code in here from before to determine the winner of the match. 
+                
+
+                team = ""
+
+                if slippiGame.start.is_teams == True:
+                    team = teamDict[player.team]
+                
+
+                # TODO: translate the tags from full-width japanese characters into half-width regular english characters so that tags can be searched with regular keyboard inputs. 
+                # Leave japanese tags in japanese characters. 
+
+                charInsert = f"INSERT INTO character(charName, charID, color, didWin, matchID, team, tag) VALUES('{charName}', '{charID}', {player.costume}, {didWinGame(slippiGame, curPort)}, '{matchID}', '{team}', '{player.tag}');"
+
+                try:
+                    #print("before char insert")
 
 
+                    conn = psycopg2.connect("dbname='SlippiStats' user='postgres' host='localhost' password='admin'")
+                    cur = conn.cursor()
+
+
+                    cur.execute(charInsert)
+                    conn.commit()
+
+                    #print("after char insert")
+
+                except Exception as e:
+                    print(e)
+                    print("failed to insert into char...")
+
+            curPort += 1
+
+
+        cur.close()
 
     except:
         print(f'CORRUPTED: {slippiFileName}')
@@ -423,6 +520,9 @@ def insert_files_from_folder_into_database(folder):
     this function accepts the name of a folder as a string and will rename all the .slp files in the directory and sub-directories. 
     '''
 
+    global numFiles
+
+
     #print("Connect to the database using the conn global variable")
     #print("NOT YET IMPLEMENTED!!!!")
 
@@ -471,12 +571,13 @@ def insert_files_from_folder_into_database(folder):
 
                 currFilePath = path.join(root, curr)
 
-                #print('can process file {}'.format(currFilePath))
-
-                #newFileNameWhole = insert_data_into_database(currFilePath)
-
                 insert_data_into_database(currFilePath)
 
+                
+                numFiles += 1
+
+                if numFiles % 150 == 0:
+                    print(f"files processed: {numFiles}")
 
                 '''
                 if newFileNameWhole != '':
@@ -492,9 +593,6 @@ def insert_files_from_folder_into_database(folder):
                 pass
 
 
-    #print(f"finished renaming files in {folder}")
-
-
 # NOTE: this is where the program starts executing when run as a command line program. 
 if __name__ == "__main__":
 
@@ -502,6 +600,12 @@ if __name__ == "__main__":
 
     print(f"Directory being processed: {directory}")
 
-    insert_files_from_folder_into_database(directory)
+    # "D:\Project Slippi Replays\All WSU Slippi Replays from Google Drive"
+
+    # /mnt/d/Project Slippi Replays/All WSU Slippi Replays from Google Drive
+
+    #insert_files_from_folder_into_database(directory)
+
+    insert_files_from_folder_into_database("/mnt/d/Project Slippi Replays/All WSU Slippi Replays from Google Drive")
 
     #print("All files in the directory have been renamed.")

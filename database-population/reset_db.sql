@@ -1,9 +1,12 @@
+drop table character;
+
+drop table match;
+
 create table match (
     matchID char(50),
     stageName char(50),
     stageID integer,
-    date date,
-    time time,
+    matchDate timestamp,
     gameType char(10),
     fileName varchar,
     primary key(matchID)
