@@ -12,6 +12,11 @@ from slippi import *
 from os import walk, listdir, rename, path
 import psycopg2
 import uuid
+import unicodedata
+
+SlippiStats = "dbname='SlippiStats' user='postgres' host='localhost' password='admin'"
+SlippiTest = "dbname='SlippiTest' user='postgres' host='localhost' password='admin'"
+
 
 conn = psycopg2.connect("dbname='SlippiStats' user='postgres' host='localhost' password='admin'")
 cur = conn.cursor()
@@ -215,7 +220,7 @@ def insert_data_into_database(slippiFileName):
             #print("before match insert")
 
                     
-            conn = psycopg2.connect("dbname='SlippiStats' user='postgres' host='localhost' password='admin'")
+            conn = psycopg2.connect(SlippiStats)
             cur = conn.cursor()
 
             # insert the match data into the database. 
@@ -270,13 +275,16 @@ def insert_data_into_database(slippiFileName):
                 # TODO: translate the tags from full-width japanese characters into half-width regular english characters so that tags can be searched with regular keyboard inputs. 
                 # Leave japanese tags in japanese characters. 
 
-                charInsert = f"INSERT INTO character(charName, charID, color, didWin, matchID, team, tag) VALUES('{charName}', '{charID}', {player.costume}, {didWinGame(slippiGame, curPort)}, '{matchID}', '{team}', '{player.tag}');"
+                convertedTag = unicodedata.normalize('NFKC', player.tag)
+
+
+                charInsert = f"INSERT INTO character(charName, charID, color, didWin, matchID, team, tag) VALUES('{charName}', '{charID}', {player.costume}, {didWinGame(slippiGame, curPort)}, '{matchID}', '{team}', '{convertedTag}');"
 
                 try:
                     #print("before char insert")
 
 
-                    conn = psycopg2.connect("dbname='SlippiStats' user='postgres' host='localhost' password='admin'")
+                    conn = psycopg2.connect(SlippiStats)
                     cur = conn.cursor()
 
 
