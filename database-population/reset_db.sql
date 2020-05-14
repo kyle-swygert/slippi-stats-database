@@ -1,6 +1,4 @@
-drop table character;
-
-drop table match;
+drop table character, match cascade;
 
 create table match (
     matchID char(50),

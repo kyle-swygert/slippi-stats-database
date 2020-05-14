@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 // below using statements added for the project. 
-
+using Npgsql;
 
 namespace Slippi_Stats_Database_App
 {
