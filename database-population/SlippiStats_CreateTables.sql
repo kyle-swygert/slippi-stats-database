@@ -17,24 +17,9 @@ create table character (
     team char(5), -- the team that the player was on during a match. Will be null if the game was not a Teams match. 
     tag char(4), -- only need 4 since that is the absolute max number of chars that can be used in Melee
     portNum integer,
-    primary key(charID),
+    primary key(charID)
     
 );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 -- this relation will relate all the characters that played in a specific match. 
 create table character_played_in_match (
@@ -69,6 +54,17 @@ create table event (
 
 );
 
+
+create table tournament_set (
+
+    setID char(50) UNIQUE,
+    eventID char(50), -- can be used to relate the set to a specific tournament.
+    primary key(setID, eventID), 
+    foreign key(eventID) references event(eventID)
+
+
+);
+
 create table match_part_of_set (
 
     matchID char(50),
@@ -76,15 +72,5 @@ create table match_part_of_set (
     foreign key(matchID) references match(matchID),
     foreign key(setID) references tournament_set(setID),
     primary key(matchID, setID)
-
-);
-
-create table tournament_set (
-
-    setID char(50),
-    eventID char(50), -- can be used to relate the set to a specific tournament.
-    primary key(setID, eventID), 
-    foreign key(eventID) references event(eventID)
-
 
 );

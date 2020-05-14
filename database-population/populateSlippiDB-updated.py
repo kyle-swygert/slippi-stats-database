@@ -126,21 +126,6 @@ def insert_data_into_database(slippiFileName):
 
         fileName = slippiFileName.split('/')[-1]
 
-        #print(f"INSERT NOT IMPLEMENTED YET!!!!!")
-
-        '''
-        match data to insert into the DB:
-
-        unique matchID
-        stage name
-        stage ID value
-        dateTime
-        filename
-        gametype: (singles, teams, FFA)
-
-
-        '''
-
         matchInsert = f"INSERT INTO match(matchID, stageName, stageID, matchdate, gameType, numofframes, filename) VALUES('{matchID}', '{stageName}', {stageID}, TIMESTAMP '{tempTime}', '{gameType}', {slippiGame.metadata.duration}, '{fileName}');"
 
         # print(matchInsert)
@@ -161,22 +146,6 @@ def insert_data_into_database(slippiFileName):
         except Exception as e:
             print(e)
             print("Insert into match failed...")
-
-        '''
-        character data to insert into the DB:
-
-        unique charID
-        matchID same as the previously generated string so that the character can be associated with the specific match. 
-        didWin Bool
-        long char name: Captain_Falcon
-        short char name: CF (if possible, is this even needed? probably not...)
-        char ID value
-        color
-        tag (set to null if not used)
-
-        '''
-
-        #print(f"charaters in the current game:")
 
         curPort = 0
 
@@ -202,7 +171,7 @@ def insert_data_into_database(slippiFileName):
 
                 convertedTag = unicodedata.normalize('NFKC', player.tag)
 
-                charInsert = f"INSERT INTO character(charName, charID, color, didWin, matchID, team, tag, portNum) VALUES('{charName}', '{charID}', {player.costume}, {didWinGame(slippiGame, curPort)}, '{matchID}', '{team}', '{convertedTag}', {curPort});"
+                charInsert = f"INSERT INTO character(charName, charID, color, didWin, team, tag, portNum) VALUES('{charName}', '{charID}', {player.costume}, {didWinGame(slippiGame, curPort)}, '{team}', '{convertedTag}', {curPort});"
 
                 try:
                     #print("before char insert")
@@ -219,6 +188,24 @@ def insert_data_into_database(slippiFileName):
                     print(e)
                     print("failed to insert into char...")
 
+
+                try:
+                    # inserting into the character_played_in_match table
+
+                    charInMatchInsert = f"INSERT INTO character_played_in_match(matchID, charID) VALUES('{matchID}', '{charID}');"
+
+                    conn = psycopg2.connect(databaseConn)
+                    cur = conn.cursor()
+
+                    cur.execute(charInMatchInsert)
+                    conn.commit()
+
+                except Exception as e:
+                    print(e)
+                    print("failed to insert into character_played_in_match")
+
+
+
             curPort += 1
 
         cur.close()
@@ -226,14 +213,11 @@ def insert_data_into_database(slippiFileName):
     except:
         print(f'CORRUPTED: {slippiFileName}')
 
-    return  # newFile
+    return
 
 
 def insert_files_from_folder_into_database(folder):
-    '''
-    this function accepts the name of a folder as a string and will rename all the .slp files in the directory and sub-directories. 
-    '''
-
+   
     global numFiles
 
     #print("Connect to the database using the conn global variable")
@@ -255,19 +239,7 @@ def insert_files_from_folder_into_database(folder):
         # dirs represents the sub-directories in the currently processing directory
         # files represents the files inside the root directory
 
-        # TODO: For each directory and sub-directory in the main directory, create a thread to rename that specific directory.
-        '''
-        NOTE: Thiw might mean that the way that the program works may need to be changed. if there is a directory in a directory, don't rename the directory recursively, ONLY rename the .slp files in the directory. 
-
-        make a list of threads, where each thread is a function execution of the insert_files_from_folder_into_database() function. Only execute 4 threads at a time. when one thread is complete, add another thread to the currently running queue. 
-
-
-        '''
-        # I want to store the file back into the directory that it came from in the directories, and I believe that I will need the root string to do that.
-        #print(root + " " + str(files))
-
-        # TODO: in the future, reorganize the code so that the path.join() method is only called once in this funtion. will make this code cleaner in my opinion.
-
+       
         #print(f"Processing Directory {root}: ")
 
         for curr in files:
@@ -286,15 +258,6 @@ def insert_files_from_folder_into_database(folder):
 
                 if numFiles % 150 == 0:
                     print(f"files processed: {numFiles}")
-
-                '''
-                if newFileNameWhole != '':
-                    newFilePath = path.join(root, newFileNameWhole)
-                    rename(currFilePath, newFilePath)
-                else:
-                    #print('something went wrong...')
-                    pass
-                '''
 
             else:
                 print(f'WRONG FORMAT: {curr}')
