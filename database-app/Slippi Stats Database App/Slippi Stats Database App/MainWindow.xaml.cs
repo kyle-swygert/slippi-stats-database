@@ -296,6 +296,7 @@ namespace Slippi_Stats_Database_App
             // display basic information below the grid. 
 
 
+
         }
 
         private void DatesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
