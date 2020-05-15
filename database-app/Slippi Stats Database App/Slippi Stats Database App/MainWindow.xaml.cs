@@ -312,6 +312,7 @@ namespace Slippi_Stats_Database_App
              */
 
 
+
             // clear the character listbox and the tag listbox
 
             CharListBox.Items.Clear();
