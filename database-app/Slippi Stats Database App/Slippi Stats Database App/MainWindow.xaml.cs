@@ -73,7 +73,7 @@ namespace Slippi_Stats_Database_App
         {
 
             // NOTE: Change the line below when using the real DB, rather than the test DB. 
-            using (var connection = new NpgsqlConnection(testDBConnStr))
+            using (var connection = new NpgsqlConnection(slippiStatsConnStr))
             {
                 connection.Open();
                 using (var cmd = new NpgsqlCommand())
@@ -149,6 +149,40 @@ namespace Slippi_Stats_Database_App
 
             // reference the GenerateBusinessQuery() from Yelp DB for help.
 
+            /*
+             
+             NOTE: This is the base query to use to populate the app with the correct data for a match object. 
+             
+            select matchid, stagename, stageid, matchdate, gametype, numofframes, filename
+            from (match natural join character_played_in_match natural join character) charinmatch
+            group by matchid
+             
+            select matchid, stagename, stageid, matchdate, gametype, numofframes, filename
+            from (match natural join character_played_in_match natural join character) charinmatch
+
+            where {add conditions for searching here}
+
+            group by matchid
+             
+             */
+
+
+            string searchCond = "";
+
+            // add the dates to the query
+
+            // add the tags to the query
+
+            // add the characters to the query
+
+            // add all the checkboxes to the query. 
+
+
+
+
+            string fullQuery = $"select matchid, stagename, stageid, matchdate, gametype, numofframes, filename from (match natural join character_played_in_match natural join character) charinmatch {searchCond} group by matchid;";
+
+
 
             return null;
         }
@@ -187,7 +221,7 @@ namespace Slippi_Stats_Database_App
 
         private void populateDatesListBox()
         {
-            string dateQuery = "select distinct(date(matchdate)) from match;";
+            string dateQuery = "select distinct(date(matchdate)) from match order by date(matchdate) ;";
 
             execQuery(dateQuery, addDate);
 
@@ -231,9 +265,22 @@ namespace Slippi_Stats_Database_App
             // query the database with the values of items on the GUI of the app. 
 
 
+            /*
+             
+             NOTE: This is the base query to use to populate the app with the correct data for a match object. 
+             
+            select matchid, stagename, stageid, matchdate, gametype, numofframes, filename
+            from (match natural join character_played_in_match natural join character) charinmatch
+            group by matchid
+             
+             
+             */
+
+
+
             // NOTE: This is a simple query used for TESTING PURPOSES ONLY!!! Remove after testing. 
 
-            string allMatch = "select * from match;";
+            string allMatch = "select matchid, stagename, stageid, matchdate, gametype, numofframes, filename from(match natural join character_played_in_match natural join character) charinmatch group by matchid;";
 
 
             execQuery(allMatch, addGridRow);
@@ -249,6 +296,157 @@ namespace Slippi_Stats_Database_App
             // display basic information below the grid. 
 
 
+        }
+
+        private void DatesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // when the dates that are selected changes, update the tag listbox and the character listbox accordingly. 
+
+            /*
+             
+             select distinct(tag) 
+            from (match natural join character_played_in_match natural join character) charinmatch
+            where ( date(matchdate)='2020-02-06' or date(matchdate)='2020-02-27' );
+             
+             */
+
+
+            // clear the character listbox and the tag listbox
+
+            CharListBox.Items.Clear();
+            TagsListBox.Items.Clear();
+
+
+
+            int dateCount = 0;
+
+            string allDates = "";
+
+            List<string> dates = new List<string>();
+
+            // gather dates in a list
+
+            foreach (DateTime singleDate in DatesListBox.SelectedItems)
+            {
+
+                // this line splits the string representing the date by the space character and gets the first substring that represents the date only. 
+                dates.Add(singleDate.Date.ToString().Split(' ')[0]);
+
+                dateCount += 1;
+            }
+
+
+            // create a string where there is an ' or ' inserted between the dates
+
+            if (dates.Count > 1)
+            {
+
+                foreach (string date in dates)
+                {
+
+                    allDates += $" date(matchdate)='{date}' or ";
+
+
+                }
+
+                // remove the final ' or ', or the last 4 characters from the string. 
+
+                allDates = allDates.Substring(0, allDates.Length - 4);
+
+
+                // insert into a where parens block. 
+                allDates = $" where ( {allDates} ) ";
+
+            } else if (dates.Count == 1) 
+            {
+                // there is only a single date, build the part of the query with a single query. no need to add the ' or ' sections. 
+
+                allDates = $" where ( date(matchdate)='{dates[0]}' ) ";
+
+
+
+            } else if (dates.Count == 0)
+            {
+                // Dont add the 'where ()' part to the string at all. the query will not search by the dates.
+                // nothing should be added to the string here. 
+
+
+            }
+
+
+
+            // if there is at least one date, insert the previous string into ' where ( {dates} )
+
+
+
+            string updatedTagsQuery = $" select distinct(tag) from(match natural join character_played_in_match natural join character) charinmatch {allDates} ;";
+            
+            execQuery(updatedTagsQuery, addTag);
+
+
+            /*
+
+           select distinct(charname) 
+          from (match natural join character_played_in_match natural join character) charinmatch
+          where ( date(matchdate)='2020-02-06' or date(matchdate)='2020-02-27' );
+
+           */
+
+
+            string updatedCharsQuery = $" select distinct(charname) from(match natural join character_played_in_match natural join character) charinmatch {allDates} ;";
+
+            execQuery(updatedCharsQuery, addCharacter);
+
+
+        }
+
+        private void TagsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // when the tags that are selected is changed, update the character listbox accordingly. 
+
+
+
+            // gather all the dates that are selected. 
+
+            // build the string of all selected dates.
+
+
+
+
+            // gather all the tags that are selected. 
+
+            // build the string of all the selected tags. 
+
+
+
+            // NOTE: remmeber to check for a count of zero for both the dates and the tags. 
+
+
+
+            // build the query to be run on the database. 
+
+        }
+
+        private void CharListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // when the character listbox selections are changed, nothing is to be updated. 
+
+
+        }
+
+        private void ClearDatesButton_Click(object sender, RoutedEventArgs e)
+        {
+            DatesListBox.SelectedItems.Clear();
+        }
+
+        private void ClearTagsButton_Click(object sender, RoutedEventArgs e)
+        {
+            TagsListBox.SelectedItems.Clear();
+        }
+
+        private void ClearCharsButton_Click(object sender, RoutedEventArgs e)
+        {
+            CharListBox.SelectedItems.Clear();
         }
     }
 }

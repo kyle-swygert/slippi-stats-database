@@ -10,13 +10,13 @@
         <TabControl HorizontalAlignment="Left" Height="635" Margin="10,25,0,0" VerticalAlignment="Top" Width="1374">
             <TabItem Header="Match Search">
                 <Grid Background="#FFE5E5E5">
-                    <Label Content="Characters" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-                    <ListBox x:Name="CharListBox" HorizontalAlignment="Left" Height="140" Margin="10,36,0,0" VerticalAlignment="Top" Width="200"/>
-                    <Label Content="Tags" HorizontalAlignment="Left" Margin="10,181,0,0" VerticalAlignment="Top"/>
-                    <ListBox x:Name="TagsListBox" HorizontalAlignment="Left" Height="140" Margin="10,207,0,0" VerticalAlignment="Top" Width="200"/>
-                    <Label Content="Dates" HorizontalAlignment="Left" Margin="10,352,0,0" VerticalAlignment="Top"/>
-                    <ListBox x:Name="DatesListBox" HorizontalAlignment="Left" Height="219" Margin="10,378,0,0" VerticalAlignment="Top" Width="200"/>
-                    <DataGrid x:Name="MatchGrid" HorizontalAlignment="Left" Height="370" Margin="215,36,0,0" VerticalAlignment="Top" Width="934"/>
+                    <Label Content="Characters" HorizontalAlignment="Left" Margin="10,391,0,0" VerticalAlignment="Top"/>
+                    <ListBox x:Name="CharListBox" SelectionMode="Multiple" HorizontalAlignment="Left" Height="140" Margin="10,417,0,0" VerticalAlignment="Top" Width="200" SelectionChanged="CharListBox_SelectionChanged"/>
+                    <Label Content="Tags" HorizontalAlignment="Left" Margin="10,200,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.821,4.984"/>
+                    <ListBox x:Name="TagsListBox" SelectionMode="Multiple" HorizontalAlignment="Left" Height="140" Margin="10,226,0,0" VerticalAlignment="Top" Width="200" SelectionChanged="TagsListBox_SelectionChanged"/>
+                    <Label Content="Dates" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                    <ListBox x:Name="DatesListBox" SelectionMode="Multiple" HorizontalAlignment="Left" Height="140" Margin="10,36,0,0" VerticalAlignment="Top" Width="200" SelectionChanged="DatesListBox_SelectionChanged"/>
+                    <DataGrid x:Name="MatchGrid" HorizontalAlignment="Left" Height="370" Margin="215,36,0,0" VerticalAlignment="Top" Width="934" SelectionChanged="MatchGrid_SelectionChanged"/>
                     <Frame Content="Color / team?" HorizontalAlignment="Left" Height="171" Margin="1154,36,0,0" VerticalAlignment="Top" Width="100"/>
                     <Frame Content="Game Type" HorizontalAlignment="Left" Height="171" Margin="1259,36,0,0" VerticalAlignment="Top" Width="100"/>
                     <Frame Content="Stage" HorizontalAlignment="Left" Height="135" Margin="1154,212,0,0" VerticalAlignment="Top" Width="205"/>
@@ -34,6 +34,9 @@
                     <CheckBox x:Name="TeamBlueCB" Content="Blue Team" HorizontalAlignment="Left" Margin="1154,60,0,0" VerticalAlignment="Top"/>
                     <CheckBox x:Name="TeamRedCB" Content="Red Team" HorizontalAlignment="Left" Margin="1154,80,0,0" VerticalAlignment="Top"/>
                     <CheckBox x:Name="TeamGreenCB" Content="Green Team" HorizontalAlignment="Left" Margin="1154,100,0,0" VerticalAlignment="Top"/>
+                    <Button x:Name="ClearDatesButton" Content="Clear Date Selections" HorizontalAlignment="Left" Margin="10,176,0,0" VerticalAlignment="Top" Width="200" Click="ClearDatesButton_Click"/>
+                    <Button x:Name="ClearTagsButton" Content="Clear Tag Selections" HorizontalAlignment="Left" Margin="10,366,0,0" VerticalAlignment="Top" Width="200" Click="ClearTagsButton_Click"/>
+                    <Button x:Name="ClearCharsButton" Content="Clear Character Selections" HorizontalAlignment="Left" Margin="10,557,0,0" VerticalAlignment="Top" Width="200" Click="ClearCharsButton_Click"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Char Vs. Char">

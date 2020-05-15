@@ -278,16 +278,21 @@ if __name__ == "__main__":
     # /mnt/d/Project Slippi Replays/All WSU Slippi Replays from Google Drive
 
     # NOTE: Change the value of this boolean variable to connect to either the testing database with a smaller dataset or the main database to be used in the C# app.
-    testing = True
+    testing = False
 
     databaseConn
 
-    if testing == True:
+    print(f'value of testing: {testing}')
 
+    if testing is True:
+ 
+        print(f'testing db insertion')
         databaseConn = SlippiTest
         insert_files_from_folder_into_database(directory)
 
     else:
+
+        print(f'real db insertion')
 
         databaseConn = SlippiStats
         insert_files_from_folder_into_database(
