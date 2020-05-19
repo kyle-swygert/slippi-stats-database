@@ -124,7 +124,7 @@ def insert_data_into_database(slippiFileName):
         stageName = str(slippiGame.start.stage.__dict__['_name_'])
         stageID = str(slippiGame.start.stage.__dict__['_value_'])
 
-        fileName = slippiFileName.split('/')[-1]
+        fileName = slippiFileName
 
         matchInsert = f"INSERT INTO match(matchID, stageName, stageID, matchdate, gameType, numofframes, filename) VALUES('{matchID}', '{stageName}', {stageID}, TIMESTAMP '{tempTime}', '{gameType}', {slippiGame.metadata.duration}, '{fileName}');"
 
@@ -280,6 +280,17 @@ if __name__ == "__main__":
     # NOTE: Change the value of this boolean variable to connect to either the testing database with a smaller dataset or the main database to be used in the C# app.
     testing = False
 
+    wsl = False
+
+    fullFilePath = ""
+
+    if wsl is True:
+        fullFilePath = "/mnt/d/Project Slippi Replays/All WSU Slippi Replays from Google Drive"
+    else:
+        fullFilePath = "D:\\Project Slippi Replays\\All WSU Slippi Replays from Google Drive"
+
+
+
     databaseConn
 
     print(f'value of testing: {testing}')
@@ -295,7 +306,6 @@ if __name__ == "__main__":
         print(f'real db insertion')
 
         databaseConn = SlippiStats
-        insert_files_from_folder_into_database(
-            "/mnt/d/Project Slippi Replays/All WSU Slippi Replays from Google Drive")
+        insert_files_from_folder_into_database(fullFilePath)
 
     #print("All files in the directory have been renamed.")

@@ -124,7 +124,7 @@ def insert_data_into_database(slippiFileName):
         stageName = str(slippiGame.start.stage.__dict__['_name_'])
         stageID = str(slippiGame.start.stage.__dict__['_value_'])
 
-        fileName = slippiFileName.split('/')[-1]
+        fileName = slippiFileName
 
         #print(f"INSERT NOT IMPLEMENTED YET!!!!!")
 

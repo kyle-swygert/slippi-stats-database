@@ -57,6 +57,12 @@ namespace Slippi_Stats_Database_App
             populateDatesListBox();
             populateTagsListBox();
             initCheckBoxes();
+            initComboBoxes();
+
+
+            MatchGrid.IsReadOnly = true;
+            CharInfoGrid.IsReadOnly = true;
+
         }
 
 
@@ -110,6 +116,23 @@ namespace Slippi_Stats_Database_App
             gameTypeCheckBoxes.Add(SinglesCB);
             gameTypeCheckBoxes.Add(TeamsCB);
             gameTypeCheckBoxes.Add(FreeForAllCB);
+
+        }
+
+        private void initComboBoxes()
+        {
+            // populate the combo boxes with all the names of the characters that are in the database
+
+            // create query
+
+            string characterQuery = "select distinct(charname) from character order by charname asc;";
+
+            // execute query and populate the comboboxes
+
+            execQuery(characterQuery, addComboBoxItem);
+
+
+
 
         }
 
@@ -251,9 +274,18 @@ namespace Slippi_Stats_Database_App
                 didWin = reader.GetBoolean(3),
                 teamColor = reader.GetString(4),
                 tag = reader.GetString(5),
-                portNumber = reader.GetInt32(6)
+                portNumber = reader.GetInt32(6) + 1
             });
 
+
+        }
+
+        private void addComboBoxItem(NpgsqlDataReader reader)
+        {
+
+            Char1ComboBox.Items.Add(reader.GetString(0).TrimEnd());
+
+            Char2ComboBox.Items.Add(reader.GetString(0).TrimEnd());
 
         }
 
@@ -263,6 +295,37 @@ namespace Slippi_Stats_Database_App
             // This method will generate a query based on all the selected items on the GUI of the app to display the proper data to the screen. 
 
             // reference the GenerateBusinessQuery() from Yelp DB for help.
+
+
+
+
+            string testDivWRemainder = @"
+select distinct(match.* ) from
+
+(select charinmatch.matchid
+from character_played_in_match as charinmatch, match as m, character as mychar
+where mychar.charid = charinmatch.charid
+
+and mychar.charname in ('CAPTAIN_FALCON', 'MARTH')
+group by charinmatch.matchid
+having count(charinmatch.charid) >= (select count(charid) from character )
+	
+
+) as subresult
+natural join match natural join character_played_in_match natural join character
+where stagename in ('POKEMON_STADIUM')
+
+    and date(matchdate) in ('2019-09-14')
+    and tag in ('SELF');";
+
+
+
+
+
+
+
+
+
 
             /*
              
@@ -340,9 +403,31 @@ namespace Slippi_Stats_Database_App
 
             // add all the checkboxes to the query. 
 
-            
 
-            string fullQuery = $"select matchid, stagename, stageid, matchdate, gametype, numofframes, filename from (match natural join character_played_in_match natural join character) charinmatch {searchCond} group by matchid;";
+            string testDivWRemainder2 = $@"
+select distinct(match.* ) from
+
+(select charinmatch.matchid
+from character_played_in_match as charinmatch, match as m, character as mychar
+where mychar.charid = charinmatch.charid
+
+and mychar.charname in ('CAPTAIN_FALCON', 'MARTH')
+group by charinmatch.matchid
+having count(charinmatch.charid) >= (select count(charid) from character )
+	
+
+) as subresult
+natural join match natural join character_played_in_match natural join character
+where stagename in ('POKEMON_STADIUM') 
+
+    and date(matchdate) in ('2019-09-14')";
+
+
+
+
+
+
+            string fullQuery = $"select matchid, stagename, stageid, matchdate, gametype, numofframes, filename from (match natural join character_played_in_match natural join character) charinmatch {searchCond} group by matchid order by matchdate;";
 
            
 
@@ -719,7 +804,30 @@ namespace Slippi_Stats_Database_App
             MatchGrid.Items.Clear();
 
 
+            string testDivWRemainder = @"
+select matchid, stagename, stageid, matchdate, gametype, numofframes, filename from 
+(select charinmatch.matchid
+from character_played_in_match as charinmatch, match as m, character as mychar
+where mychar.charid = charinmatch.charid
+ and mychar.charname in ('CAPTAIN_FALCON', 'MARTH')
+group by charinmatch.matchid
+having (count(charinmatch.charid) >= (select count(charid) from character ))
+) as subresult 
+natural join match natural join character_played_in_match natural join character
+where gametype='Singles'
+group by matchid, stagename, stageid, matchdate, gametype, numofframes, filename
+having count( distinct( charname)) = 2
+";
+
+
+
+
+            // TODO: This has been edited for testing, change back when finished testing!!!
             execQuery(fullQuery, addMatchGridRow);
+
+
+            //execQuery(testDivWRemainder, addMatchGridRow);
+
 
             NumMatchesLabel.Content = "# of Matches: " + MatchGrid.Items.Count;
 
@@ -865,12 +973,14 @@ namespace Slippi_Stats_Database_App
 
         private void ClearTagsButton_Click(object sender, RoutedEventArgs e)
         {
-            TagsListBox.SelectedItems.Clear();
+            //TagsListBox.SelectedItems.Clear();
+            TagsListBox.SelectedIndex = -1;
         }
 
         private void ClearCharsButton_Click(object sender, RoutedEventArgs e)
         {
-            CharListBox.SelectedItems.Clear();
+            //CharListBox.SelectedItems.Clear();
+            CharListBox.SelectedIndex = -1;
         }
 
         private void ClearAllSelectionsButton_Click(object sender, RoutedEventArgs e)
@@ -893,18 +1003,57 @@ namespace Slippi_Stats_Database_App
             }
 
             DatesListBox.SelectedItems.Clear();
-            TagsListBox.SelectedItems.Clear();
-            CharListBox.SelectedItems.Clear();
+            TagsListBox.SelectedIndex = -1;
+            CharListBox.SelectedIndex = -1;
 
             CharInfoGrid.Items.Clear();
 
-            // TODO: reset the radio buttons to their initial position when executed????? I might just want to keep those the same actually. 
-
-
+            
         }
 
         private void CharInfoGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            // calculate matchup stats button clicked. 
+
+
+            string matchesWBothchars = $@"
+select matchid, stagename, stageid, matchdate, gametype, numofframes, filename from
+(select charinmatch.matchid
+from character_played_in_match as charinmatch, match as m, character as mychar
+where mychar.charid = charinmatch.charid
+ and mychar.charname in ('{Char1ComboBox.SelectedItem.ToString()}', '{Char2ComboBox.SelectedItem.ToString()}')
+group by charinmatch.matchid
+having(count(charinmatch.charid) >= (select count(charid) from character ))
+) as subresult
+natural join match natural join character_played_in_match natural join character
+where gametype = 'Singles'
+group by matchid, stagename, stageid, matchdate, gametype, numofframes, filename
+having count(distinct(charname)) = 2
+";
+
+            if (Char1ComboBox.SelectedItem.ToString() == Char2ComboBox.SelectedItem.ToString())
+            {
+                // the user is trying to find stats for a ditto, which will not be calculated properly. 
+
+                // TODO: Create a popup window saying to choose 2 different characters to compute stats for. 
+
+
+
+            } else
+            {
+                // execute the query and calculate the proper stats for the selected characters
+
+
+
+            }
+
+
+
 
         }
     }
