@@ -25,3 +25,21 @@ group by charname
 order by pickrate desc;
 
 
+
+
+select distinct(match.*)  from 
+(
+select matchid from 
+(select charinmatch.matchid
+from character_played_in_match as charinmatch, match as m, character as mychar
+where mychar.charid = charinmatch.charid
+ and mychar.charname in ('CAPTAIN_FALCON', 'MARTH')
+group by charinmatch.matchid
+having (count(charinmatch.charid) >= (select count(charid) from character ))
+) as subresult 
+natural join match natural join character_played_in_match natural join character
+where gametype='Singles'
+group by matchid
+having count( distinct( charname)) = 2
+)  as goblin 
+natural join match natural join character_played_in_match natural join character

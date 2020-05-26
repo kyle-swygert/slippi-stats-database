@@ -20,7 +20,7 @@
                     <Frame Content="Team Color" HorizontalAlignment="Left" Height="79" Margin="1154,36,0,0" VerticalAlignment="Top" Width="100"/>
                     <Frame Content="Game Type" HorizontalAlignment="Left" Height="79" Margin="1259,36,0,0" VerticalAlignment="Top" Width="100"/>
                     <Frame Content="Stage" HorizontalAlignment="Left" Height="138" Margin="1154,120,0,0" VerticalAlignment="Top" Width="205"/>
-                    <Label x:Name="NumMatchesLabel" Content="# of Matches: ###" HorizontalAlignment="Left" Margin="996,5,0,0" VerticalAlignment="Top" Width="153"/>
+                    <Label x:Name="NumMatchesLabel" Content="# of Matches: ###" HorizontalAlignment="Left" Margin="996,5,0,0" VerticalAlignment="Top" Width="150"/>
                     <Button x:Name="SearchButton" Content="Search Matches" HorizontalAlignment="Left" Margin="1217,467,0,0" VerticalAlignment="Top" Width="100" Height="61" Click="SearchButton_Click"/>
                     <CheckBox x:Name="SinglesCB" Content="Singles" HorizontalAlignment="Left" Margin="1260,60,0,0" VerticalAlignment="Top"/>
                     <CheckBox x:Name="TeamsCB" Content="Teams" HorizontalAlignment="Left" Margin="1260,80,0,0" VerticalAlignment="Top"/>
@@ -45,11 +45,17 @@
             </TabItem>
             <TabItem Header="Char Vs. Char">
                 <Grid Background="#FFE5E5E5">
-                    <Label Content="Vs." FontWeight="Bold" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="635,0,0,0"/>
-                    <Label Content="Character Matchup Stats" FontSize="20" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                    <ComboBox x:Name="Char1ComboBox" HorizontalAlignment="Left" Margin="400,10,0,0" VerticalAlignment="Top" Width="150"/>
-                    <ComboBox x:Name="Char2ComboBox" HorizontalAlignment="Left" Margin="802,10,0,0" VerticalAlignment="Top" Width="150"/>
-                    <Button Content="Calculate Matchup Stats" HorizontalAlignment="Left" Height="22" Margin="1183,10,0,0" VerticalAlignment="Top" Width="175" Click="Button_Click"/>
+                    <Label Content="Vs." FontWeight="Bold" FontSize="20" VerticalAlignment="Top" Margin="666,0,667,0"/>
+                    <Label Content="Character Matchup Stats: " FontSize="20" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <ComboBox x:Name="Char1ComboBox" HorizontalAlignment="Left" Margin="511,10,0,0" VerticalAlignment="Top" Width="150"/>
+                    <ComboBox x:Name="Char2ComboBox" HorizontalAlignment="Left" Margin="706,10,0,0" VerticalAlignment="Top" Width="150"/>
+                    <Button Content="Calculate Matchup Stats" HorizontalAlignment="Left"  Margin="1154,8,0,0" VerticalAlignment="Top" Width="205" Click="Button_Click"/>
+                    <Label x:Name="CharMatchupNumMatchesLabel" Content="# of Matches: ###" HorizontalAlignment="Left" Margin="996,5,0,0" VerticalAlignment="Top" Width="148"/>
+                    <Label x:Name="Character1Label" FontWeight="Bold" FontSize="20" Content="Character 1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="155,76,0,0" Width="300"/>
+                    <Label x:Name="Character2Label" FontWeight="Bold" FontSize="20" Content="Character 2" HorizontalAlignment="Left" Margin="1017,76,0,0" VerticalAlignment="Top" Width="300"/>
+                    <Rectangle Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="262" Margin="10,326,0,0" Stroke="Black" VerticalAlignment="Top" Width="1349"/>
+                    <DataGrid x:Name="Char1StageWinsGrid" HorizontalAlignment="Left" Height="200" Margin="10,121,0,0" VerticalAlignment="Top" Width="250"/>
+                    <DataGrid x:Name="Char2StageWinsGrid" HorizontalAlignment="Left" Height="200" Margin="1108,121,0,0" VerticalAlignment="Top" Width="250" SelectionChanged="Char2StageWinsGrid_SelectionChanged"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Char Overall Stats" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top">

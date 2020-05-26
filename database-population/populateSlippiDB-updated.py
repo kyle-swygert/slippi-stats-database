@@ -156,7 +156,7 @@ def insert_data_into_database(slippiFileName):
                 #print(f"name: {player.character.__dict__['_name_']}, color: {player.costume}, tag: {player.tag}")
 
                 charName = player.character.__dict__['_name_']
-                #charID = player.character.__dict__['_value_']
+                cssID = player.character.__dict__['_value_']
 
                 # create a unique ID for each character that is in the database.
                 charID = str(uuid.uuid4())
@@ -171,7 +171,7 @@ def insert_data_into_database(slippiFileName):
 
                 convertedTag = unicodedata.normalize('NFKC', player.tag)
 
-                charInsert = f"INSERT INTO character(charName, charID, color, didWin, team, tag, portNum) VALUES('{charName}', '{charID}', {player.costume}, {didWinGame(slippiGame, curPort)}, '{team}', '{convertedTag}', {curPort});"
+                charInsert = f"INSERT INTO character(charName, charID, color, didWin, team, tag, portNum, cssid) VALUES('{charName}', '{charID}', {player.costume}, {didWinGame(slippiGame, curPort)}, '{team}', '{convertedTag}', {curPort}, {cssID});"
 
                 try:
                     #print("before char insert")
@@ -278,9 +278,9 @@ if __name__ == "__main__":
     # /mnt/d/Project Slippi Replays/All WSU Slippi Replays from Google Drive
 
     # NOTE: Change the value of this boolean variable to connect to either the testing database with a smaller dataset or the main database to be used in the C# app.
-    testing = False
+    testing = True
 
-    wsl = False
+    wsl = True
 
     fullFilePath = ""
 
