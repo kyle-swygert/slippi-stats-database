@@ -45,6 +45,7 @@ namespace Slippi_Stats_Database_App
             public string teamColor { set; get; }
             public string tag { set; get; }
             public int portNumber { set; get; }
+            public int cssID { set; get; }
         }
 
         // NOTE: Initialize the app on startup inside this method. 
@@ -88,7 +89,7 @@ namespace Slippi_Stats_Database_App
         {
 
             // NOTE: Change the line below when using the real DB, rather than the test DB. 
-            using (var connection = new NpgsqlConnection(slippiStatsConnStr))
+            using (var connection = new NpgsqlConnection(testDBConnStr))
             {
                 connection.Open();
                 using (var cmd = new NpgsqlCommand())
@@ -407,6 +408,11 @@ having count( distinct( charname)) = 2
         private void Char2StageWinsGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            // calculate overall character stats button. 
         }
     }
 }

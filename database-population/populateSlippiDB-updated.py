@@ -299,7 +299,8 @@ if __name__ == "__main__":
  
         print(f'testing db insertion')
         databaseConn = SlippiTest
-        insert_files_from_folder_into_database(directory)
+        #insert_files_from_folder_into_database(directory)
+        insert_files_from_folder_into_database(fullFilePath)
 
     else:
 

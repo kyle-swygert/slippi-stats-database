@@ -59,7 +59,21 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Char Overall Stats" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top">
-                <Grid Background="#FFE5E5E5"/>
+                <Grid Background="#FFE5E5E5">
+                    <Label Content="Character Overall Stats: " FontSize="20" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <ComboBox x:Name="CharOverallComboBox" HorizontalAlignment="Left" Margin="305,10,0,0" VerticalAlignment="Top" Width="150"/>
+                    <Button x:Name="CalculateOverallCharStatsButton" Content="Calculate Character Stats" HorizontalAlignment="Left"  Margin="1154,8,0,0" VerticalAlignment="Top" Width="205" Click="Button_Click_1"/>
+                    <ListBox x:Name="TagsUsedListBox" SelectionMode="Single" HorizontalAlignment="Left" Height="140" Margin="10,68,0,0" VerticalAlignment="Top" Width="200"/>
+                    <Label Content="Tags" HorizontalAlignment="Left" Margin="10,42,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Colors" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,213,0,0"/>
+                    <ListBox x:Name="ColorsUsedListBox" SelectionMode="Single" HorizontalAlignment="Left" Height="140" Margin="10,239,0,0" VerticalAlignment="Top" Width="200"/>
+                    <Label x:Name="CharOverallWinPercentLabel" Content="Character: Win% PickRate%" FontSize="20" FontWeight="Bold" HorizontalAlignment="Left" Margin="470,0,0,0" VerticalAlignment="Top" Width="679"/>
+                    <DataGrid x:Name="OverallMatchUpWinDataGrid" HorizontalAlignment="Left" Height="306" Margin="305,73,0,0" VerticalAlignment="Top" Width="252"/>
+                    <DataGrid x:Name="OverallStageWinDataGrid" HorizontalAlignment="Left" Height="306" Margin="619,73,0,0" VerticalAlignment="Top" Width="254"/>
+                    <Label Content="Match Up Win %" HorizontalAlignment="Left" Margin="305,42,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Stage Win %" HorizontalAlignment="Left" Margin="619,42,0,0" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="TournamentLegalStagesCB" Content="Tournament Legal Stages Only" HorizontalAlignment="Left" Margin="1154,32,0,0" VerticalAlignment="Top"/>
+                </Grid>
             </TabItem>
             <TabItem Header="TabItem" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top">
                 <Grid Background="#FFE5E5E5"/>

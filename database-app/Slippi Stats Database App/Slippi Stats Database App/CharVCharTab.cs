@@ -25,6 +25,7 @@ namespace Slippi_Stats_Database_App
         {
             public string stageName { get; set; }
             public double winRate { get; set; }
+            public int numTimesPlayedOnStage { get; set; }
         }
 
 
