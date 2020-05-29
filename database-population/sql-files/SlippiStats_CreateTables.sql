@@ -17,6 +17,7 @@ create table character (
     team char(5), -- the team that the player was on during a match. Will be null if the game was not a Teams match. 
     tag char(4), -- only need 4 since that is the absolute max number of chars that can be used in Melee
     portNum integer,
+    cssID integer,
     primary key(charID)
     
 );

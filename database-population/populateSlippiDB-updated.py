@@ -60,7 +60,13 @@ def didWinGame(slippiGame, playerPort):
 
     lastFrame = slippiGame.frames[-1]
 
-    playerPortPostFrameStocks = lastFrame.ports[playerPort].leader.post.stocks
+
+    currPlayerData = lastFrame.ports[playerPort]
+
+    if currPlayerData is None:
+        return False
+
+    playerPortPostFrameStocks = currPlayerData.leader.post.stocks
 
     return playerPortPostFrameStocks > 0
 
@@ -210,8 +216,9 @@ def insert_data_into_database(slippiFileName):
 
         cur.close()
 
-    except:
-        print(f'CORRUPTED: {slippiFileName}')
+    except Exception as e:
+        print(e)
+        print(f'## ERROR IN FILE: {slippiFileName}')
 
     return
 
@@ -257,15 +264,18 @@ def insert_files_from_folder_into_database(folder):
                 numFiles += 1
 
                 if numFiles % 150 == 0:
-                    print(f"files processed: {numFiles}")
+                    print(f"***** FILES PROCESSED: {numFiles} *****")
 
             else:
                 print(f'WRONG FORMAT: {curr}')
-                pass
+                
 
 
 # NOTE: this is where the program starts executing when run as a command line program.
 if __name__ == "__main__":
+
+    print("DataBase Population Updated:")
+
 
     directory = path.join(path.dirname(path.realpath(__file__)), 'slp')
 
@@ -302,7 +312,7 @@ if __name__ == "__main__":
         #insert_files_from_folder_into_database(directory)
         insert_files_from_folder_into_database(fullFilePath)
 
-    else:
+    else: # testing is False
 
         print(f'real db insertion')
 

@@ -127,19 +127,19 @@ group by charname
             col1.Header = "Opponent";
             col1.Binding = new Binding("charName");
             col1.Width = 50;
-            OverallStageWinDataGrid.Columns.Add(col1);
+            OverallMatchUpWinDataGrid.Columns.Add(col1);
 
             DataGridTextColumn col2 = new DataGridTextColumn();
             col2.Header = "Num Matched Played Against Opponent";
             col2.Binding = new Binding("numTimesPlayedAgainst");
             col2.Width = 50;
-            OverallStageWinDataGrid.Columns.Add(col2);
+            OverallMatchUpWinDataGrid.Columns.Add(col2);
 
             DataGridTextColumn col3 = new DataGridTextColumn();
             col3.Header = "Win Rate";
             col3.Binding = new Binding("winRate");
             col3.Width = 50;
-            OverallStageWinDataGrid.Columns.Add(col3);
+            OverallMatchUpWinDataGrid.Columns.Add(col3);
         }
 
         private void addStageWinRateColumns()
