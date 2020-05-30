@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 
 // below using statements added for the project. 
 using Npgsql;
+using System.Drawing;
+
 
 namespace Slippi_Stats_Database_App
 {
@@ -31,7 +33,12 @@ namespace Slippi_Stats_Database_App
             public double winRate { get; set; }
         }
 
-
+        public class UsesObj
+        {
+            public string item { get; set; }
+            public int itemInt { get; set; }
+            public int uses { get; set; }
+        }
 
 
         // NOTE: All the functionality of the Char Overall Tab will be placed in this file for the partial class
@@ -96,6 +103,40 @@ group by charname
 
             initOverallCharComboBox();
 
+            initColorsUsedDataGrid();
+
+            addTagsUsedColumns();
+
+        }
+
+        private void initColorsUsedDataGrid()
+        {
+            // TODO: Populate the datagrid with the stock icon image as a test to begin with. 
+
+            // for final version, query the database to display the icon of the color and the number if times that it was used in all the matches. 
+
+
+
+            // add columns to the data grid
+
+            //DataGridTextColumn col1 = new DataGridTextColumn();
+            //col1.Header = "Color Used";
+            ////col1.Binding = new Binding("stageName");
+            //col1.Width = 200;
+            //ColorsUsedDataGrid.Columns.Add(col1);
+
+            DataGridColumn col1 = new DataGridTextColumn();
+            col1.Header = "Color Used";
+            //col1.Binding = new Binding("stageName");
+            col1.Width = 200;
+            
+            ColorsUsedDataGrid.Columns.Add(col1);
+
+            // add all the icons to the data grid
+
+
+
+
         }
 
         private void initOverallCharComboBox()
@@ -117,8 +158,17 @@ group by charname
 
         private void addTagsUsedColumns()
         {
-            // NOTE: The tags item is a ListBox currently, change to a DataGrid in the near future. 
+            DataGridTextColumn col1 = new DataGridTextColumn();
+            col1.Header = "Tag";
+            col1.Binding = new Binding("tag");
+            col1.Width = 50;
+            OverallTagUsageGrid.Columns.Add(col1);
 
+            DataGridTextColumn col2 = new DataGridTextColumn();
+            col2.Header = "Uses";
+            col2.Binding = new Binding("uses");
+            col2.Width = 50;
+            OverallTagUsageGrid.Columns.Add(col2);
         }
 
         private void addMatchupWinRateColumns()
@@ -163,9 +213,93 @@ group by charname
             OverallStageWinDataGrid.Columns.Add(col3);
         }
 
+        private void addStageWinRateGridRow(NpgsqlDataReader reader)
+        {
+            OverallStageWinDataGrid.Items.Add(new StageWin()
+            {
+                stageName = reader.GetString(0),
+                numTimesPlayedOnStage = reader.GetInt32(1),
+                winRate = reader.GetDouble(2)
+            });
+            
+
+        }
+
+        private void addTagUsageGridRow(NpgsqlDataReader reader)
+        {
+            OverallTagUsageGrid.Items.Add(new UsesObj()
+            {
+                item = reader.GetString(0),
+                uses = reader.GetInt32(1)
+            });
+
+
+        }
+
+        private void addColorUsageGridRow(NpgsqlDataReader reader)
+        {
+            OverallTagUsageGrid.Items.Add(new UsesObj()
+            {
+                itemInt = reader.GetInt32(0),
+                uses = reader.GetInt32(1)
+            });
+
+
+        }
+
+        private void ResetCharOverallGUIItems()
+        {
+            // Reset all the items that are on the Char Overall tab. 
+            // call this function when querying the database for another character's stats. 
+
+
+
+
+        }
+
         private void CalculateOverallCharStatsButtonClicked()
         {
             //query the database to calculate the stats for the selected character in the program. 
+
+
+            // query for stage win rates. 
+
+            string stageWinRates = $@"
+select stagename, count(*), (sum( case when didwin=true then 1 else 0 end )::float /  count(*)::float) * 100 as winrates
+from tourneysingleschars
+where charname='{CharOverallComboBox.SelectedItem.ToString()}'
+group by stagename;
+";
+
+
+            execQuery(stageWinRates, addStageWinRateGridRow);
+
+            // query for the tags used
+
+            string tagUses = $@"
+select tag, count(*) as uses
+from tourneysingleschars
+where charname='{CharOverallComboBox.SelectedItem.ToString()}'
+group by tag
+order by uses desc;
+";
+            execQuery(tagUses, addTagUsageGridRow);
+
+            // query for the colors used. 
+
+            string colorUses = $@"
+select color, count(*) as uses
+from tourneysingleschars
+where charname='{CharOverallComboBox.SelectedItem.ToString()}'
+group by color
+order by uses desc;
+";
+
+
+            // query for the matchup win rates. NOTE: This query has not been solved yet, finish this in the near future!!!!
+
+
+
 
         }
 
