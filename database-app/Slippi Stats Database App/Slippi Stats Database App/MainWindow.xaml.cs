@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 
 // below using statements added for the project. 
 using Npgsql;
+using System.IO;
+
 
 namespace Slippi_Stats_Database_App
 {
@@ -53,6 +55,14 @@ namespace Slippi_Stats_Database_App
         {
             InitializeComponent();
 
+
+            // initialize items to be used by the whole program. 
+
+            initStockIcons();
+
+
+            // initialize each tab 
+
             initMatchSearchTab();
 
             initCharMatchupTab();
@@ -70,15 +80,63 @@ namespace Slippi_Stats_Database_App
         private string slippiStatsConnStr = "Host = localhost; Username = postgres; Database = SlippiStats; password = admin";
 
 
-        private Dictionary<string, string> stockIcons;
+        private Dictionary<string, List<string>> stockIcons;
+
+        private Dictionary<string, System.Drawing.Image> stockIconsDict;
 
 
         // TODO: Find stock icons (maybe from Slippi Desktop app) and populate the Dict with the names of chars and filenames for the icons. 
         private void initStockIcons()
         {
-            stockIcons = new Dictionary<string, string>();
+            stockIcons = new Dictionary<string, List<string>>();
 
             // populate the dictionary with character names and stock icon images to be used in the character listbox. 
+
+            // each dictionary entry will be a list of strings. 
+            // the key for the dictionary will be the character name. 
+            // the value for the dictionary entry will be the list of all the stock icons for that specified character. 
+
+
+
+
+
+            
+
+
+
+
+
+
+            stockIconsDict = new Dictionary<string, System.Drawing.Image>();
+            // key will be "{}-{}" where the {} sections will be filled in by the values that are extracted from the database. 
+
+            // the value will be the whole filepath to the icon in the filesystem. 
+
+            string[] icons = Directory.GetFiles("melee-stock-icons", "*.png");
+
+            foreach (string icon in icons)
+            {
+                // add the filepath to the dictionary. 
+
+
+                // create the key for the entry with the filename of the file. 
+
+                string[] keyParts = icon.Split('\\')[1].Split('.')[0].Split('-');
+
+                string key = $"{keyParts[2]}-{keyParts[3]}";
+
+                System.Drawing.Image goblin = System.Drawing.Image.FromFile(icon);
+
+                
+
+                // insert the filepath into the dictionary. 
+                stockIconsDict.Add(key, goblin);
+
+
+            }
+
+
+
 
         }
 
@@ -413,6 +471,8 @@ having count( distinct( charname)) = 2
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             // calculate overall character stats button. 
+
+            CalculateOverallCharStatsButtonClicked();
         }
     }
 }

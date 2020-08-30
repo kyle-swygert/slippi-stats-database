@@ -106,6 +106,11 @@ namespace Slippi_Stats_Database_App
         private void addWinRateInformation(NpgsqlDataReader reader)
         {
 
+            // TODO: Check that there is data for the matchup that was selected. IF there is NOT matchup data, do not process this method. 
+
+            // TODO: Check that the win rate percent is being set properly. If the winrate does not have 5 decimal places in it, display as many digits as there are in the number. 
+
+
             // check that the reader has any data in it. 
 
             if (reader.HasRows == false)
@@ -136,8 +141,24 @@ namespace Slippi_Stats_Database_App
 
                 }
 
+                double char1WinRate = reader.GetDouble(3);
 
-                Character1Label.Content += ": " + reader.GetDouble(3).ToString();
+                if (char1WinRate > 50.0)
+                {
+                    // character 1 has a higher win rate, set the text color to green
+                    Character1Label.Foreground = Brushes.Green;
+
+                }
+                else
+                {
+                    // character 2 has lower winrate, set text color to Red
+                    Character1Label.Foreground = Brushes.Red;
+
+                }
+
+                // TODO: Check if the winrate is a whole number or not. If the winrate is a double, then round to 2 decimal places. If the winrate is a whole number, jsut display all the digits. 
+
+                Character1Label.Content += ": " + reader.GetDouble(3).ToString().Substring(0, 5) + "%";
 
                 // change the number of matches to the proper number. 
 
@@ -156,8 +177,23 @@ namespace Slippi_Stats_Database_App
 
                 }
 
+                double char2WinRate = reader.GetDouble(3);
 
-                Character2Label.Content += ": " + reader.GetDouble(3).ToString();
+                if (char2WinRate > 50.0)
+                {
+                    // character 1 has a higher win rate, set the text color to green
+                    Character2Label.Foreground = Brushes.Green;
+
+                }
+                else
+                {
+                    // character 2 has lower winrate, set text color to Red
+                    Character2Label.Foreground = Brushes.Red;
+
+                }
+
+
+                Character2Label.Content += ": " + reader.GetDouble(3).ToString().Substring(0, 5) + "%";
 
 
             }

@@ -107,6 +107,8 @@ group by charname
 
             addTagsUsedColumns();
 
+            addColorsUsedColumns();
+
         }
 
         private void initColorsUsedDataGrid()
@@ -125,12 +127,12 @@ group by charname
             //col1.Width = 200;
             //ColorsUsedDataGrid.Columns.Add(col1);
 
-            DataGridColumn col1 = new DataGridTextColumn();
-            col1.Header = "Color Used";
-            //col1.Binding = new Binding("stageName");
-            col1.Width = 200;
+            //DataGridColumn col1 = new DataGridTextColumn();
+            //col1.Header = "Color Used";
+            ////col1.Binding = new Binding("stageName");
+            //col1.Width = 200;
             
-            ColorsUsedDataGrid.Columns.Add(col1);
+            //ColorsUsedDataGrid.Columns.Add(col1);
 
             // add all the icons to the data grid
 
@@ -160,7 +162,7 @@ group by charname
         {
             DataGridTextColumn col1 = new DataGridTextColumn();
             col1.Header = "Tag";
-            col1.Binding = new Binding("tag");
+            col1.Binding = new Binding("item");
             col1.Width = 50;
             OverallTagUsageGrid.Columns.Add(col1);
 
@@ -169,6 +171,21 @@ group by charname
             col2.Binding = new Binding("uses");
             col2.Width = 50;
             OverallTagUsageGrid.Columns.Add(col2);
+        }
+
+        private void addColorsUsedColumns()
+        {
+            DataGridTextColumn col1 = new DataGridTextColumn();
+            col1.Header = "Color";
+            col1.Binding = new Binding("itemInt");
+            col1.Width = 50;
+            ColorsUsedDataGrid.Columns.Add(col1);
+
+            DataGridTextColumn col2 = new DataGridTextColumn();
+            col2.Header = "Uses";
+            col2.Binding = new Binding("uses");
+            col2.Width = 50;
+            ColorsUsedDataGrid.Columns.Add(col2);
         }
 
         private void addMatchupWinRateColumns()
@@ -238,11 +255,20 @@ group by charname
 
         private void addColorUsageGridRow(NpgsqlDataReader reader)
         {
-            OverallTagUsageGrid.Items.Add(new UsesObj()
+            ColorsUsedDataGrid.Items.Add(new UsesObj()
             {
                 itemInt = reader.GetInt32(0),
                 uses = reader.GetInt32(1)
             });
+
+
+        }
+
+        private void updateCharOverallLabel(NpgsqlDataReader reader)
+        {
+            // update the label once with the character name, winrate, and the pickrate of the character. 
+
+            CharOverallWinPercentLabel.Content = $"{CharOverallComboBox.SelectedItem.ToString()}: {reader.GetDouble(2)}% Winrate {reader.GetDouble(3)}% Pickrate";
 
 
         }
@@ -252,8 +278,15 @@ group by charname
             // Reset all the items that are on the Char Overall tab. 
             // call this function when querying the database for another character's stats. 
 
+            CharOverallWinPercentLabel.Content = "";
 
+            OverallMatchUpWinDataGrid.Items.Clear();
 
+            OverallStageWinDataGrid.Items.Clear();
+
+            OverallTagUsageGrid.Items.Clear();
+
+            ColorsUsedDataGrid.Items.Clear();
 
         }
 
@@ -261,6 +294,7 @@ group by charname
         {
             //query the database to calculate the stats for the selected character in the program. 
 
+            ResetCharOverallGUIItems();
 
             // query for stage win rates. 
 
@@ -294,12 +328,23 @@ where charname='{CharOverallComboBox.SelectedItem.ToString()}'
 group by color
 order by uses desc;
 ";
-
+            execQuery(colorUses, addColorUsageGridRow);
 
             // query for the matchup win rates. NOTE: This query has not been solved yet, finish this in the near future!!!!
 
 
+            // query for the overall win % for the specified character. Change the content of the label to the selected character and the win percent. 
 
+            string winratePickrateTotalgames = $@"
+select charname, count(*) as totalgames, sum( case when didwin=true then 1 else 0 end)::float / count(*) * 100 as winrate, (select sum( case when charname='{CharOverallComboBox.SelectedItem.ToString()}' then 1 else 0 end)::float / count(*)::float * 100 as pickrate
+from tourneysingleschars)
+from tourneysingleschars
+where charname = 'CAPTAIN_FALCON'
+group by charname;";
+
+            execQuery(winratePickrateTotalgames, updateCharOverallLabel);
+
+            //CharOverallWinPercentLabel
 
         }
 
