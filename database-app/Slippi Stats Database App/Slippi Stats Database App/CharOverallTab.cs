@@ -25,22 +25,7 @@ namespace Slippi_Stats_Database_App
     /// </summary>
     public partial class MainWindow : Window
     {
-
-        public class MatchUpWin
-        {
-            public string charName { get; set; }
-            public int numTimesPlayedAgainst { get; set; }
-            public double winRate { get; set; }
-        }
-
-        public class UsesObj
-        {
-            public string item { get; set; }
-            public int itemInt { get; set; }
-            public int uses { get; set; }
-        }
-
-
+        
         // NOTE: All the functionality of the Char Overall Tab will be placed in this file for the partial class
 
 

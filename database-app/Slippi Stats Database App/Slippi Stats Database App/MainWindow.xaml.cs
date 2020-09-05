@@ -25,30 +25,7 @@ namespace Slippi_Stats_Database_App
     /// </summary>
     public partial class MainWindow : Window
     {
-
-
-        public class Match
-        {
-            public string matchID { set; get; }
-            public string stageName { set; get; }
-            public int stageID { set; get; }
-            public DateTime matchDate { set; get; }
-            public string gameType { set; get; }
-            public int numOfFrames { set; get; }
-            public string fileName { set; get; }
-        }
-
-        public class GameCharacter
-        {
-            public string charName { set; get; }
-            public string charID { set; get; }
-            public int colorInt { set; get; }
-            public bool didWin { set; get; }
-            public string teamColor { set; get; }
-            public string tag { set; get; }
-            public int portNumber { set; get; }
-            public int cssID { set; get; }
-        }
+        
 
         // NOTE: Initialize the app on startup inside this method. 
         public MainWindow()

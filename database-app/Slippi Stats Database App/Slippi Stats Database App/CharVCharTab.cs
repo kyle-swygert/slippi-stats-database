@@ -20,16 +20,7 @@ namespace Slippi_Stats_Database_App
 {
     public partial class MainWindow : Window
     {
-
-        public class StageWin
-        {
-            public string stageName { get; set; }
-            public double winRate { get; set; }
-            public int numTimesPlayedOnStage { get; set; }
-        }
-
-
-
+        
         // TODO: Move all of the methods for the Char Vs. Char Tab into this file. 
 
         private void initCharMatchupTab()
@@ -143,6 +134,9 @@ namespace Slippi_Stats_Database_App
 
                 double char1WinRate = reader.GetDouble(3);
 
+                string char1WinRateStr = char1WinRate.ToString();
+               
+
                 if (char1WinRate > 50.0)
                 {
                     // character 1 has a higher win rate, set the text color to green
@@ -158,7 +152,10 @@ namespace Slippi_Stats_Database_App
 
                 // TODO: Check if the winrate is a whole number or not. If the winrate is a double, then round to 2 decimal places. If the winrate is a whole number, jsut display all the digits. 
 
-                Character1Label.Content += ": " + reader.GetDouble(3).ToString().Substring(0, 5) + "%";
+                if (!char1WinRateStr.Contains('.')) // the winrate does not have a decimal, display the whole number. 
+                    Character1Label.Content += ": " + reader.GetDouble(3).ToString() + "%";
+                else
+                    Character1Label.Content += ": " + reader.GetDouble(3).ToString().Substring(0, 5) + "%";
 
                 // change the number of matches to the proper number. 
 
@@ -179,6 +176,8 @@ namespace Slippi_Stats_Database_App
 
                 double char2WinRate = reader.GetDouble(3);
 
+                string char2WinRateStr = char2WinRate.ToString();
+
                 if (char2WinRate > 50.0)
                 {
                     // character 1 has a higher win rate, set the text color to green
@@ -193,7 +192,12 @@ namespace Slippi_Stats_Database_App
                 }
 
 
-                Character2Label.Content += ": " + reader.GetDouble(3).ToString().Substring(0, 5) + "%";
+                if (!char2WinRateStr.Contains('.')) // the winrate does not have a decimal, display the whole number. 
+                    Character2Label.Content += ": " + reader.GetDouble(3).ToString() + "%";
+                else
+                    Character2Label.Content += ": " + reader.GetDouble(3).ToString().Substring(0, 5) + "%";
+
+                //Character2Label.Content += ": " + reader.GetDouble(3).ToString().Substring(0, 5) + "%";
 
 
             }
