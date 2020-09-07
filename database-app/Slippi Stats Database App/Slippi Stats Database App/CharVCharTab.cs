@@ -229,9 +229,8 @@ namespace Slippi_Stats_Database_App
                 Char1StageWinsGrid.Items.Add(new StageWin()
                 {
                     stageName = reader.GetString(1).TrimEnd(),
-                    winRate = reader.GetDouble(4)
+                    winRate = Math.Round(reader.GetDouble(4), 2, MidpointRounding.AwayFromZero)
                 });
-
 
 
             } else if (reader.GetString(0).TrimEnd() == Char2ComboBox.SelectedItem.ToString())
@@ -244,7 +243,7 @@ namespace Slippi_Stats_Database_App
                 Char2StageWinsGrid.Items.Add(new StageWin()
                 {
                     stageName = reader.GetString(1).TrimEnd(),
-                    winRate = reader.GetDouble(4)
+                    winRate = Math.Round(reader.GetDouble(4), 2, MidpointRounding.AwayFromZero)
                 });
 
 

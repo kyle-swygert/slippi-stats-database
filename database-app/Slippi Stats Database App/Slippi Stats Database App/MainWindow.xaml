@@ -21,7 +21,7 @@
                     <Frame Content="Game Type" HorizontalAlignment="Left" Height="79" Margin="1259,36,0,0" VerticalAlignment="Top" Width="100"/>
                     <Frame Content="Stage" HorizontalAlignment="Left" Height="138" Margin="1154,120,0,0" VerticalAlignment="Top" Width="205"/>
                     <Label x:Name="NumMatchesLabel" Content="# of Matches: ###" HorizontalAlignment="Left" Margin="996,5,0,0" VerticalAlignment="Top" Width="150"/>
-                    <Button x:Name="SearchButton" Content="Search Matches" HorizontalAlignment="Left" Margin="1217,467,0,0" VerticalAlignment="Top" Width="100" Height="61" Click="SearchButton_Click"/>
+                    <Button x:Name="SearchButton" Content="Search Matches" HorizontalAlignment="Left" Margin="1208,468,0,0" VerticalAlignment="Top" Width="100" Height="61" Click="SearchButton_Click"/>
                     <CheckBox x:Name="SinglesCB" Content="Singles" HorizontalAlignment="Left" Margin="1260,60,0,0" VerticalAlignment="Top"/>
                     <CheckBox x:Name="TeamsCB" Content="Teams" HorizontalAlignment="Left" Margin="1260,80,0,0" VerticalAlignment="Top"/>
                     <CheckBox x:Name="FreeForAllCB" Content="Free For All" HorizontalAlignment="Left" Margin="1260,100,0,0" VerticalAlignment="Top"/>
@@ -74,9 +74,6 @@
                     <DataGrid x:Name="ColorsUsedDataGrid" HorizontalAlignment="Left" Height="185" Margin="10,239,0,0" VerticalAlignment="Top" Width="216"/>
                     <DataGrid x:Name="OverallTagUsageGrid" Height="126" Margin="9,77,1142,0" VerticalAlignment="Top"/>
                 </Grid>
-            </TabItem>
-            <TabItem Header="TabItem" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top">
-                <Grid Background="#FFE5E5E5"/>
             </TabItem>
         </TabControl>
         <DockPanel HorizontalAlignment="Left" Height="20" LastChildFill="False" VerticalAlignment="Top" Width="1394" Margin="0,0,-0.4,0">

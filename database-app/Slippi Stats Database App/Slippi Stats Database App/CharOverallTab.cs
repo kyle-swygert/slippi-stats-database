@@ -221,9 +221,26 @@ group by charname
             {
                 stageName = reader.GetString(0),
                 numTimesPlayedOnStage = reader.GetInt32(1),
-                winRate = reader.GetDouble(2)
+                winRate = Math.Round(reader.GetDouble(2), 2, MidpointRounding.AwayFromZero)
             });
             
+
+        }
+
+        private void addCharWinRateGridRow(NpgsqlDataReader reader)
+        {
+            // add a row for the current opponent for the selected character. 
+
+            OverallMatchUpWinDataGrid.Items.Add(new MatchUpWin()
+            {
+                // build the MatchUpWin Object. 
+                charName = reader.GetString(0), 
+                numTimesPlayedAgainst = reader.GetInt32(1),
+                winRate = Math.Round(reader.GetDouble(2),2,MidpointRounding.AwayFromZero)
+
+            });
+
+
 
         }
 
@@ -253,7 +270,53 @@ group by charname
         {
             // update the label once with the character name, winrate, and the pickrate of the character. 
 
-            CharOverallWinPercentLabel.Content = $"{CharOverallComboBox.SelectedItem.ToString()}: {reader.GetDouble(2)}% Winrate {reader.GetDouble(3)}% Pickrate";
+
+            double charWinrate = reader.GetDouble(2);
+
+            double charPickrate = reader.GetDouble(3);
+
+            string charWinrateStr = charWinrate.ToString();
+
+            string charPickrateStr = charPickrate.ToString();
+
+            CharOverallWinPercentLabel.Content = $"{CharOverallComboBox.SelectedItem.ToString()}: ";
+
+
+            if (!charWinrateStr.Contains('.'))
+            {
+                // add the whole string to the label
+
+                CharOverallWinPercentLabel.Content += charWinrateStr;
+
+            } 
+            else
+            {
+                // add only the first 5 characters of the string to the label
+                CharOverallWinPercentLabel.Content += charWinrateStr.Substring(0, 5);
+
+            }
+
+            CharOverallWinPercentLabel.Content += "% Winrate ";
+
+            if (!charPickrateStr.Contains('.'))
+            {
+                // add the whole string to the label
+
+                CharOverallWinPercentLabel.Content += charPickrateStr;
+
+            }
+            else
+            {
+                // add only the first 5 characters of the string to the label
+                CharOverallWinPercentLabel.Content += charPickrateStr.Substring(0, 5);
+
+            }
+
+            CharOverallWinPercentLabel.Content += "% Pickrate";
+
+
+
+            //CharOverallWinPercentLabel.Content = $"{CharOverallComboBox.SelectedItem.ToString()}: {reader.GetDouble(2)}% Winrate {reader.GetDouble(3)}% Pickrate";
 
 
         }
@@ -324,14 +387,49 @@ order by uses desc;
 select charname, count(*) as totalgames, sum( case when didwin=true then 1 else 0 end)::float / count(*) * 100 as winrate, (select sum( case when charname='{CharOverallComboBox.SelectedItem.ToString()}' then 1 else 0 end)::float / count(*)::float * 100 as pickrate
 from tourneysingleschars)
 from tourneysingleschars
-where charname = 'CAPTAIN_FALCON'
+where charname = '{CharOverallComboBox.SelectedItem.ToString()}'
 group by charname;";
 
             execQuery(winratePickrateTotalgames, updateCharOverallLabel);
 
             //CharOverallWinPercentLabel
 
+            string matchupWinrateQuery = $@"
+
+select charname, count(*) as gamesPlayed,
+sum(case when didwin=false then 1 else 0 end) * 100 / count(*)::float as winrate
+from
+(select * from
+(select matchid from
+(select distinct(matchid) from tourneysingleschars
+where charname = '{CharOverallComboBox.SelectedItem.ToString()}') ass natural join tourneysingleschars
+group by matchid
+having count(distinct(didwin))=2) goblin
+natural join tourneysingleschars
+where charname <> '{CharOverallComboBox.SelectedItem.ToString()}') allotherchars
+group by charname
+order by winrate desc
+
+";
+
+            execQuery(matchupWinrateQuery, addCharWinRateGridRow);
+
         }
+
+        string ConvertPercentRateToString(double rate)
+        {
+
+            string rateStr = rate.ToString();
+
+            if (!rateStr.Contains('.'))
+                return rateStr;
+            else
+                return rateStr.Substring(0, 5);
+            
+        }
+
+
+
 
 
     }
