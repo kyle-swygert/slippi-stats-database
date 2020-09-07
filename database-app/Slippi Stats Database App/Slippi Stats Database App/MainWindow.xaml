@@ -7,20 +7,84 @@
         mc:Ignorable="d"
         Title="Slippi Stats Database" Height="700" Width="1400">
     <Grid>
-        <TabControl HorizontalAlignment="Left" Height="650" Margin="10,10,0,0" VerticalAlignment="Top" Width="1374">
+        <TabControl HorizontalAlignment="Left" Height="635" Margin="10,25,0,0" VerticalAlignment="Top" Width="1374">
             <TabItem Header="Match Search">
-                <Grid Background="#FFE5E5E5"/>
+                <Grid Background="#FFE5E5E5">
+                    <Label Content="Characters" HorizontalAlignment="Left" Margin="10,391,0,0" VerticalAlignment="Top"/>
+                    <ListBox x:Name="CharListBox" SelectionMode="Single" HorizontalAlignment="Left" Height="140" Margin="10,417,0,0" VerticalAlignment="Top" Width="200" SelectionChanged="CharListBox_SelectionChanged"/>
+                    <Label Content="Tags" HorizontalAlignment="Left" Margin="10,200,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.821,4.984"/>
+                    <ListBox x:Name="TagsListBox" SelectionMode="Single" HorizontalAlignment="Left" Height="140" Margin="10,226,0,0" VerticalAlignment="Top" Width="200" SelectionChanged="TagsListBox_SelectionChanged"/>
+                    <Label Content="Dates" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                    <ListBox x:Name="DatesListBox" SelectionMode="Multiple" HorizontalAlignment="Left" Height="140" Margin="10,36,0,0" VerticalAlignment="Top" Width="200" SelectionChanged="DatesListBox_SelectionChanged"/>
+                    <DataGrid x:Name="MatchGrid" HorizontalAlignment="Left" Height="370" Margin="215,36,0,0" VerticalAlignment="Top" Width="934" SelectionChanged="MatchGrid_SelectionChanged" SelectionMode="Single" />
+                    <Frame Content="Team Color" HorizontalAlignment="Left" Height="79" Margin="1154,36,0,0" VerticalAlignment="Top" Width="100"/>
+                    <Frame Content="Game Type" HorizontalAlignment="Left" Height="79" Margin="1259,36,0,0" VerticalAlignment="Top" Width="100"/>
+                    <Frame Content="Stage" HorizontalAlignment="Left" Height="138" Margin="1154,120,0,0" VerticalAlignment="Top" Width="205"/>
+                    <Label x:Name="NumMatchesLabel" Content="# of Matches: ###" HorizontalAlignment="Left" Margin="996,5,0,0" VerticalAlignment="Top" Width="150"/>
+                    <Button x:Name="SearchButton" Content="Search Matches" HorizontalAlignment="Left" Margin="1208,468,0,0" VerticalAlignment="Top" Width="100" Height="61" Click="SearchButton_Click"/>
+                    <CheckBox x:Name="SinglesCB" Content="Singles" HorizontalAlignment="Left" Margin="1260,60,0,0" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="TeamsCB" Content="Teams" HorizontalAlignment="Left" Margin="1260,80,0,0" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="FreeForAllCB" Content="Free For All" HorizontalAlignment="Left" Margin="1260,100,0,0" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="BattlefieldCB" Content="Battlefield" HorizontalAlignment="Left" Margin="1154,145,0,0" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="DreamlandCB" Content="Dream Land N64" HorizontalAlignment="Left" Margin="1154,165,0,0" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="FinalDestCB" Content="Final Destination" HorizontalAlignment="Left" Margin="1154,183,0,0" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="FoDCB" Content="Fountain of Dreams" HorizontalAlignment="Left" Margin="1154,203,0,0" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="PokemonStadiumCB" Content="Pokemon Stadium" HorizontalAlignment="Left" Margin="1154,223,0,0" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="YoshiStoryCB" Content="Yoshi's Story" HorizontalAlignment="Left" Margin="1154,243,0,0" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="TeamBlueCB" Content="Blue Team" HorizontalAlignment="Left" Margin="1154,60,0,0" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="TeamRedCB" Content="Red Team" HorizontalAlignment="Left" Margin="1154,80,0,0" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="TeamGreenCB" Content="Green Team" HorizontalAlignment="Left" Margin="1154,100,0,0" VerticalAlignment="Top"/>
+                    <Button x:Name="ClearDatesButton" Content="Clear Date Selections" HorizontalAlignment="Left" Margin="10,176,0,0" VerticalAlignment="Top" Width="200" Click="ClearDatesButton_Click"/>
+                    <Button x:Name="ClearTagsButton" Content="Clear Tag Selections" HorizontalAlignment="Left" Margin="10,366,0,0" VerticalAlignment="Top" Width="200" Click="ClearTagsButton_Click"/>
+                    <Button x:Name="ClearCharsButton" Content="Clear Character Selections" HorizontalAlignment="Left" Margin="10,557,0,0" VerticalAlignment="Top" Width="200" Click="ClearCharsButton_Click"/>
+                    <Button x:Name="ClearAllSelectionsButton" Content="Clear All Selections" HorizontalAlignment="Left" VerticalAlignment="Top" Width="205" Margin="1154,8,0,0" Click="ClearAllSelectionsButton_Click"/>
+                    <Label Content="Selected Match Character Information" HorizontalAlignment="Left" Margin="215,411,0,0" VerticalAlignment="Top"/>
+                    <DataGrid x:Name="CharInfoGrid" HorizontalAlignment="Left" Height="120" Margin="215,437,0,0" VerticalAlignment="Top" Width="934" SelectionChanged="CharInfoGrid_SelectionChanged"/>
+                    <Label Content="Match Search View" FontSize="20" FontWeight="Bold" HorizontalAlignment="Left" Margin="215,-1,0,0" VerticalAlignment="Top" Width="211"/>
+                </Grid>
             </TabItem>
             <TabItem Header="Char Vs. Char">
-                <Grid Background="#FFE5E5E5"/>
+                <Grid Background="#FFE5E5E5">
+                    <Label Content="Vs." FontWeight="Bold" FontSize="20" VerticalAlignment="Top" Margin="666,0,667,0"/>
+                    <Label Content="Character Matchup Stats: " FontSize="20" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <ComboBox x:Name="Char1ComboBox" HorizontalAlignment="Left" Margin="511,10,0,0" VerticalAlignment="Top" Width="150"/>
+                    <ComboBox x:Name="Char2ComboBox" HorizontalAlignment="Left" Margin="706,10,0,0" VerticalAlignment="Top" Width="150"/>
+                    <Button Content="Calculate Matchup Stats" HorizontalAlignment="Left"  Margin="1154,8,0,0" VerticalAlignment="Top" Width="205" Click="Button_Click"/>
+                    <Label x:Name="CharMatchupNumMatchesLabel" Content="# of Matches: ###" HorizontalAlignment="Left" Margin="996,5,0,0" VerticalAlignment="Top" Width="148"/>
+                    <Label x:Name="Character1Label" FontWeight="Bold" FontSize="20" Content="Character 1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="155,76,0,0" Width="300"/>
+                    <Label x:Name="Character2Label" FontWeight="Bold" FontSize="20" Content="Character 2" HorizontalAlignment="Left" Margin="1017,76,0,0" VerticalAlignment="Top" Width="300"/>
+                    <Rectangle Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="262" Margin="10,326,0,0" Stroke="Black" VerticalAlignment="Top" Width="1349"/>
+                    <DataGrid x:Name="Char1StageWinsGrid" HorizontalAlignment="Left" Height="200" Margin="10,121,0,0" VerticalAlignment="Top" Width="250"/>
+                    <DataGrid x:Name="Char2StageWinsGrid" HorizontalAlignment="Left" Height="200" Margin="1108,121,0,0" VerticalAlignment="Top" Width="250" SelectionChanged="Char2StageWinsGrid_SelectionChanged"/>
+                </Grid>
             </TabItem>
             <TabItem Header="Char Overall Stats" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top">
-                <Grid Background="#FFE5E5E5"/>
-            </TabItem>
-            <TabItem Header="TabItem" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top">
-                <Grid Background="#FFE5E5E5"/>
+                <Grid Background="#FFE5E5E5">
+                    <Label Content="Character Overall Stats: " FontSize="20" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <ComboBox x:Name="CharOverallComboBox" HorizontalAlignment="Left" Margin="305,10,0,0" VerticalAlignment="Top" Width="150"/>
+                    <Button x:Name="CalculateOverallCharStatsButton" Content="Calculate Character Stats" HorizontalAlignment="Left"  Margin="1154,8,0,0" VerticalAlignment="Top" Width="205" Click="Button_Click_1"/>
+                    <Label Content="Tags" HorizontalAlignment="Left" Margin="10,42,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Colors" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="11,330,0,0"/>
+                    <Label x:Name="CharOverallWinPercentLabel" Content="Character: Win% PickRate%" FontSize="20" FontWeight="Bold" HorizontalAlignment="Left" Margin="470,0,0,0" VerticalAlignment="Top" Width="679"/>
+                    <DataGrid x:Name="OverallMatchUpWinDataGrid" HorizontalAlignment="Left" Height="500" Margin="305,73,0,0" VerticalAlignment="Top" Width="250"/>
+                    <DataGrid x:Name="OverallStageWinDataGrid" HorizontalAlignment="Left" Height="499" Margin="619,73,0,0" VerticalAlignment="Top" Width="250"/>
+                    <Label Content="Match Up Win %" HorizontalAlignment="Left" Margin="305,42,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Stage Win %" HorizontalAlignment="Left" Margin="619,42,0,0" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="TournamentLegalStagesCB" Content="Tournament Legal Stages Only" HorizontalAlignment="Left" Margin="1154,32,0,0" VerticalAlignment="Top"/>
+                    <DataGrid x:Name="ColorsUsedDataGrid" HorizontalAlignment="Right" Height="185" Margin="0,362,1142,0" VerticalAlignment="Top" Width="216"/>
+                    <DataGrid x:Name="OverallTagUsageGrid" Height="251" Margin="9,77,1142,0" VerticalAlignment="Top"/>
+                </Grid>
             </TabItem>
         </TabControl>
+        <DockPanel HorizontalAlignment="Left" Height="20" LastChildFill="False" VerticalAlignment="Top" Width="1394" Margin="0,0,-0.4,0">
+            <Menu Width="1394" Margin="0,0,0,0.6">
+                <MenuItem Header="File" Height="20" Width="40">
+                    <MenuItem Header="Add Files to Database" HorizontalAlignment="Left" Height="20" Width="200" Click="MenuItem_Click"/>
+                </MenuItem>
+                <MenuItem Header="Help" Height="20" Width="40"/>
+                <MenuItem Header="Info" Height="19" Width="40"/>
+            </Menu>
+        </DockPanel>
 
     </Grid>
 </Window>

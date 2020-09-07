@@ -13,3 +13,8 @@ C:\Users\Kyle\Desktop\personalProjects\slippi-stats-database\database-app\Slippi
 C:\Users\Kyle\Desktop\personalProjects\slippi-stats-database\database-app\Slippi Stats Database App\Slippi Stats Database App\obj\Debug\Slippi Stats Database App.csproj.CoreCompileInputs.cache
 C:\Users\Kyle\Desktop\personalProjects\slippi-stats-database\database-app\Slippi Stats Database App\Slippi Stats Database App\obj\Debug\Slippi Stats Database App.exe
 C:\Users\Kyle\Desktop\personalProjects\slippi-stats-database\database-app\Slippi Stats Database App\Slippi Stats Database App\obj\Debug\Slippi Stats Database App.pdb
+C:\Users\Kyle\Desktop\personalProjects\slippi-stats-database\database-app\Slippi Stats Database App\Slippi Stats Database App\bin\Debug\Npgsql.dll
+C:\Users\Kyle\Desktop\personalProjects\slippi-stats-database\database-app\Slippi Stats Database App\Slippi Stats Database App\bin\Debug\System.Threading.Tasks.Extensions.dll
+C:\Users\Kyle\Desktop\personalProjects\slippi-stats-database\database-app\Slippi Stats Database App\Slippi Stats Database App\bin\Debug\Npgsql.xml
+C:\Users\Kyle\Desktop\personalProjects\slippi-stats-database\database-app\Slippi Stats Database App\Slippi Stats Database App\bin\Debug\System.Threading.Tasks.Extensions.xml
+C:\Users\Kyle\Desktop\personalProjects\slippi-stats-database\database-app\Slippi Stats Database App\Slippi Stats Database App\obj\Debug\Slippi Stats Database App.csproj.CopyComplete

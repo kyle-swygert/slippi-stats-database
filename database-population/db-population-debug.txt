@@ -1,0 +1,6 @@
+I keep getting an error when trying to process some slippi replays:
+"payload size is not divisible by 3: (number that is being complained about)
+what is the payload that is being talked about?
+does it have to do with inserting into the database? 
+I only get this error at the end of the script, meaning it is the least specific error that I could be getting...
+NOTE: The files with the payload issue might actually be corrupted, since most of these files with these issues are from the BeakBonk Livestream setup, streaming from the Wii to the PC, and an early quit-out or something might have messed up the data stream to save the slippi file improperly. 

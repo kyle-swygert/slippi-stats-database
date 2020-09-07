@@ -1,0 +1,339 @@
+
+
+-- trying to figure out relation division for charname
+
+-- this gives the list of matchids that fit the search criteria
+
+select charinmatch.matchid
+from character_played_in_match as charinmatch, match as m, character as mychar
+where mychar.charid = charinmatch.charid 
+ and mychar.charname in ('CAPTAIN_FALCON', 'MARTH')
+group by charinmatch.matchid
+having count(charinmatch.charid) >= (select count(charid) from character ) 
+
+
+-- this gives all the tables joined together to view the character info that is part of the match. 
+
+select * from 
+
+(select charinmatch.matchid
+from character_played_in_match as charinmatch, match as m, character as mychar
+where mychar.charid = charinmatch.charid 
+ and mychar.charname in ('CAPTAIN_FALCON', 'MARTH')
+group by charinmatch.matchid
+having count(charinmatch.charid) >= (select count(charid) from character )  ) as subresult 
+natural join match natural join character_played_in_match natural join character
+
+
+
+
+/*
+NOTE: I think the below statements are accurate
+
+>= gives results where the match has all the characters that are listed in the " in ( 'charname' ) " section of the query
+
+<= gives results where the match has at least one of the characters that are listed in the " in ( 'charname' ) " section of the query
+
+
+*/
+
+
+-- the below query is trying to get the match information for a query that is searching based on the (charnames, stagenames, and dates)
+
+select distinct( match.* ) from 
+
+(select charinmatch.matchid
+from character_played_in_match as charinmatch, match as m, character as mychar
+where mychar.charid = charinmatch.charid 
+ and mychar.charname in ('CAPTAIN_FALCON', 'MARTH')
+group by charinmatch.matchid
+having count(charinmatch.charid) >= (select count(charid) from character ) 
+	
+
+) as subresult 
+natural join match natural join character_played_in_match natural join character
+where stagename in ('POKEMON_STADIUM')
+	and date(matchdate) in ('2019-09-14')
+	
+
+----- char vs char query notes -----
+
+-- will need to use relational division for finding matches that include both of the characters that are selected. 
+
+
+-- calculate pickrates for all characters in the database. 
+
+select charname, (count(*)::float / (select count(*) from character)::float) * 100 as pickrate
+from (match natural join character_played_in_match natural join character) as bigboi 
+group by charname
+order by pickrate desc;
+
+-- this query finds matches that only have captain falcon and marth as characters, but ALSO includes ditto matches. I want to get rid of the ditto matches and ONLY have one char against another. 
+
+select * from 
+
+(select charinmatch.matchid
+from character_played_in_match as charinmatch, match as m, character as mychar
+where mychar.charid = charinmatch.charid 
+ and mychar.charname in ('CAPTAIN_FALCON', 'MARTH')
+group by charinmatch.matchid
+having count(charinmatch.charid) >= (select count(charid) from character ) 
+) as subresult 
+natural join match natural join character_played_in_match natural join character
+where gametype='Singles'
+	
+
+-- this query returns matches that have exactly one of each character in a singles match that can be used to calculate overall char vs char stats. 
+
+
+select distinct(match.*)  from 
+(
+select matchid from 
+(select charinmatch.matchid
+from character_played_in_match as charinmatch, match as m, character as mychar
+where mychar.charid = charinmatch.charid
+ and mychar.charname in ('CAPTAIN_FALCON', 'MARTH')
+group by charinmatch.matchid
+having (count(charinmatch.charid) >= (select count(charid) from character ))
+) as subresult 
+natural join match natural join character_played_in_match natural join character
+where gametype='Singles'
+group by matchid
+having count( distinct( charname)) = 2
+)  as goblin 
+natural join match natural join character_played_in_match natural join character
+
+-- same query results, just a bit more succinct. 
+
+select matchid, stagename, stageid, matchdate, gametype, numofframes, filename from 
+(select charinmatch.matchid
+from character_played_in_match as charinmatch, match as m, character as mychar
+where mychar.charid = charinmatch.charid
+ and mychar.charname in ('CAPTAIN_FALCON', 'MARTH')
+group by charinmatch.matchid
+having (count(charinmatch.charid) >= (select count(charid) from character ))
+) as subresult 
+natural join match natural join character_played_in_match natural join character
+where gametype='Singles'
+group by matchid, stagename, stageid, matchdate, gametype, numofframes, filename
+having count( distinct( charname)) = 2
+
+
+
+select matchid, stagename, stageid, matchdate, gametype, numofframes, filename from 
+(select charinmatch.matchid
+from character_played_in_match as charinmatch, match as m, character as mychar
+where mychar.charid = charinmatch.charid
+ and mychar.charname in ('CAPTAIN_FALCON', 'MARTH')
+group by charinmatch.matchid
+having (count(charinmatch.charid) >= (select count(charid) from character ))
+) as subresult 
+natural join match natural join character_played_in_match natural join character
+where gametype='Singles'
+group by matchid, stagename, stageid, matchdate, gametype, numofframes, filename
+having count( distinct( charname)) = 2
+
+
+-- the below query calculates win rates for both characters that have been selected
+
+
+
+select charname, 
+count(*) as totalGames,
+sum( case when didwin=true then 1 else 0 end) as wins,
+sum( case when didwin = true then 1 else 0 end) * 100 / count(*)::float as winrate
+
+from 
+
+(
+select matchid, stagename, stageid, matchdate, gametype, numofframes, filename
+
+from
+
+(select charinmatch.matchid
+from character_played_in_match as charinmatch, match as m, character as mychar
+where mychar.charid = charinmatch.charid
+ and mychar.charname in ('FOX', 'SAMUS')
+group by charinmatch.matchid
+having(count(charinmatch.charid) >= (select count(charid) from character ))
+) as subresult
+
+natural join match natural join character_played_in_match natural join character
+
+where gametype = 'Singles'
+
+group by matchid, stagename, stageid, matchdate, gametype, numofframes, filename
+
+having count(distinct(charname)) = 2 and count(distinct(didwin)) = 2 ) as matchwbothchars
+natural join character_played_in_match natural join character
+
+group by charname
+
+
+-- query to calculate win rates for selected characters on each tournament legal stage
+
+
+select charname, stagename, 
+count(*) as totalGames,
+sum( case when didwin=true then 1 else 0 end) as wins,
+sum( case when didwin = true then 1 else 0 end) * 100 / count(*)::float as winrate
+
+from 
+
+(
+select matchid, stagename, stageid, matchdate, gametype, numofframes, filename
+
+from
+
+(select charinmatch.matchid
+from character_played_in_match as charinmatch, match as m, character as mychar
+where mychar.charid = charinmatch.charid
+ and mychar.charname in ('FOX', 'CAPTAIN_FALCON')
+group by charinmatch.matchid
+having(count(charinmatch.charid) >= (select count(charid) from character ))
+) as subresultu
+
+natural join match natural join character_played_in_match natural join character
+
+where gametype = 'Singles'
+
+group by matchid, stagename, stageid, matchdate, gametype, numofframes, filename
+
+having count(distinct(charname)) = 2 and count(distinct(didwin)) = 2 ) as matchwbothchars
+natural join character_played_in_match natural join character
+
+where stagename in ('BATTLEFIELD', 'FINAL_DESTINATION', 'POKEMON_STADIUM', 'YOSHIS_STORY', 'DREAM_LAND_N64', 'FOUNTAIN_OF_DREAMS')
+
+group by charname, stagename
+
+order by stagename
+
+
+-- im tired, but i think I need to replace the inner part of the above query with this...
+-- actually probably not... i definitely need to think about this some more...
+
+select charinmatch.matchid, (select sum(case when gametype='Singles' then 1 else 0 end) from (character_played_in_match natural join match) as help 
+		   ) as fuck, (select count(charid) from (match natural join character_played_in_match natural join character) as singleschars where gametype='Singles') as shit
+from character_played_in_match as charinmatch, match as m, character as mychar
+where mychar.charid = charinmatch.charid
+ and mychar.charname in ('CAPTAIN_FALCON', 'FOX')
+group by charinmatch.matchid
+having(   (select sum(case when gametype='Singles' then 1 else 0 end) from (character_played_in_match natural join match) as help 
+		   )    = (select count(charid) from (match natural join character_played_in_match natural join character) as singleschars where gametype='Singles'))
+
+-- stage win rates for a matchup using singleschars view that I created for testing. 
+
+select charname, stagename, 
+count(*) as totalGames,
+sum( case when didwin=true then 1 else 0 end) as wins,
+sum( case when didwin = true then 1 else 0 end) * 100 / count(*)::float as winrate
+
+from
+
+(select * from 
+(select matchid
+from singleschars
+where charname in ('SAMUS', 'CAPTAIN_FALCON') 
+ and stagename in ('BATTLEFIELD', 'FINAL_DESTINATION', 'POKEMON_STADIUM', 'YOSHIS_STORY', 'DREAM_LAND_N64', 'FOUNTAIN_OF_DREAMS')
+group by matchid
+having count( distinct( charname)) = 2 and count(distinct(didwin)) = 2) as samandcapmatches
+natural join singleschars) as samandcapdata
+
+group by charname, stagename
+
+order by stagename
+
+
+-- singleschars view create statement
+
+create view singleschars as 
+select * from 
+(match natural join character_played_in_match natural join character)
+where gametype='Singles'
+
+-- tourneysingleschars view (essentially the same view, but only includes matches on tournament legal stages) 
+
+create view tourneysingleschars as 
+select * from 
+(match natural join character_played_in_match natural join character)
+where gametype='Singles' 
+and stagename in ('BATTLEFIELD', 'FINAL_DESTINATION', 'POKEMON_STADIUM', 'YOSHIS_STORY', 'DREAM_LAND_N64', 'FOUNTAIN_OF_DREAMS')
+
+-- stage winrates query that uses the tourneysingleschars view
+
+
+select charname, stagename, 
+count(*) as totalGames,
+sum( case when didwin=true then 1 else 0 end) as wins,
+sum( case when didwin = true then 1 else 0 end) * 100 / count(*)::float as winrate
+
+from
+
+(select * from 
+(select matchid
+from tourneysingleschars
+where charname in ('SAMUS', 'FOX') 
+group by matchid
+having count( distinct( charname)) = 2 and count(distinct(didwin)) = 2) as bothcharmatches
+natural join tourneysingleschars) as bothchardata
+
+group by charname, stagename
+
+order by stagename
+
+-- character winrate using tourneysingleschars
+
+
+select charname, 
+count(*) as totalGames,
+sum( case when didwin=true then 1 else 0 end) as wins,
+sum( case when didwin = true then 1 else 0 end) * 100 / count(*)::float as winrate
+
+from
+
+(select * from 
+(select matchid
+from tourneysingleschars
+where charname in ('FALCO', 'JIGGLYPUFF') 
+group by matchid
+having count( distinct( charname)) = 2 and count(distinct(didwin)) = 2) as bothcharmatches
+natural join tourneysingleschars) as bothchardata
+
+group by charname
+
+-- list the winrates of the selected character on each tournament legal stage. 
+select stagename, (sum( case when didwin=true then 1 else 0 end )::float /  count(*)::float) * 100 as winrates
+from tourneysingleschars
+where charname='CAPTAIN_FALCON'
+group by stagename;
+
+-- list the tags used by a character and the number of times the tag was used. 
+select tag, count(*) as uses
+from tourneysingleschars
+where charname='CAPTAIN_FALCON'
+group by tag
+order by uses desc;
+
+-- list the colors used by a character and the number of times the color was used. Use the charID number and the color number to display the stock icon in the all as a future feature. 
+select color, count(*) as uses
+from tourneysingleschars
+where charname='CAPTAIN_FALCON'
+group by color
+order by uses desc;
+
+-- calculate the winrates against all characters in the database, Don't count ditto matches. NOTE: This is still a work in progress, not yet working properly...
+select charname, count(*) as totalgames, sum( case when didwin=true then 1 else 0 end)::float / count(*) * 100 as winrate
+from tourneysingleschars
+where charname not in ('CAPTAIN_FALCON')
+group by charname;
+
+
+select distinct(charname), sum( case when didwin=true then 1 else 0 end)::float / count(*) * 100 as winrate
+from tourneysingleschars as t1
+where charname = any (select charname 
+					from tourneysingleschars as t2 
+					where t1.matchid=t2.matchid
+					and charname='CAPTAIN_FALCON')
+group by charname
+
+
