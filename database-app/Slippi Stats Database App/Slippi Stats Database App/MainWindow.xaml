@@ -64,15 +64,15 @@
                     <ComboBox x:Name="CharOverallComboBox" HorizontalAlignment="Left" Margin="305,10,0,0" VerticalAlignment="Top" Width="150"/>
                     <Button x:Name="CalculateOverallCharStatsButton" Content="Calculate Character Stats" HorizontalAlignment="Left"  Margin="1154,8,0,0" VerticalAlignment="Top" Width="205" Click="Button_Click_1"/>
                     <Label Content="Tags" HorizontalAlignment="Left" Margin="10,42,0,0" VerticalAlignment="Top"/>
-                    <Label Content="Colors" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,213,0,0"/>
+                    <Label Content="Colors" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="11,330,0,0"/>
                     <Label x:Name="CharOverallWinPercentLabel" Content="Character: Win% PickRate%" FontSize="20" FontWeight="Bold" HorizontalAlignment="Left" Margin="470,0,0,0" VerticalAlignment="Top" Width="679"/>
-                    <DataGrid x:Name="OverallMatchUpWinDataGrid" HorizontalAlignment="Left" Height="306" Margin="305,73,0,0" VerticalAlignment="Top" Width="252"/>
-                    <DataGrid x:Name="OverallStageWinDataGrid" HorizontalAlignment="Left" Height="306" Margin="619,73,0,0" VerticalAlignment="Top" Width="254"/>
+                    <DataGrid x:Name="OverallMatchUpWinDataGrid" HorizontalAlignment="Left" Height="500" Margin="305,73,0,0" VerticalAlignment="Top" Width="250"/>
+                    <DataGrid x:Name="OverallStageWinDataGrid" HorizontalAlignment="Left" Height="499" Margin="619,73,0,0" VerticalAlignment="Top" Width="250"/>
                     <Label Content="Match Up Win %" HorizontalAlignment="Left" Margin="305,42,0,0" VerticalAlignment="Top"/>
                     <Label Content="Stage Win %" HorizontalAlignment="Left" Margin="619,42,0,0" VerticalAlignment="Top"/>
                     <CheckBox x:Name="TournamentLegalStagesCB" Content="Tournament Legal Stages Only" HorizontalAlignment="Left" Margin="1154,32,0,0" VerticalAlignment="Top"/>
-                    <DataGrid x:Name="ColorsUsedDataGrid" HorizontalAlignment="Left" Height="185" Margin="10,239,0,0" VerticalAlignment="Top" Width="216"/>
-                    <DataGrid x:Name="OverallTagUsageGrid" Height="126" Margin="9,77,1142,0" VerticalAlignment="Top"/>
+                    <DataGrid x:Name="ColorsUsedDataGrid" HorizontalAlignment="Right" Height="185" Margin="0,362,1142,0" VerticalAlignment="Top" Width="216"/>
+                    <DataGrid x:Name="OverallTagUsageGrid" Height="251" Margin="9,77,1142,0" VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
         </TabControl>

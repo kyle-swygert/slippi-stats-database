@@ -178,17 +178,17 @@ group by charname
             DataGridTextColumn col1 = new DataGridTextColumn();
             col1.Header = "Opponent";
             col1.Binding = new Binding("charName");
-            col1.Width = 50;
+            col1.Width = 140;
             OverallMatchUpWinDataGrid.Columns.Add(col1);
 
             DataGridTextColumn col2 = new DataGridTextColumn();
-            col2.Header = "Num Matched Played Against Opponent";
+            col2.Header = "# Matches";
             col2.Binding = new Binding("numTimesPlayedAgainst");
             col2.Width = 50;
             OverallMatchUpWinDataGrid.Columns.Add(col2);
 
             DataGridTextColumn col3 = new DataGridTextColumn();
-            col3.Header = "Win Rate";
+            col3.Header = "Win %";
             col3.Binding = new Binding("winRate");
             col3.Width = 50;
             OverallMatchUpWinDataGrid.Columns.Add(col3);
@@ -199,17 +199,17 @@ group by charname
             DataGridTextColumn col1 = new DataGridTextColumn();
             col1.Header = "Stage Name";
             col1.Binding = new Binding("stageName");
-            col1.Width = 50;
+            col1.Width = 140;
             OverallStageWinDataGrid.Columns.Add(col1);
 
             DataGridTextColumn col2 = new DataGridTextColumn();
-            col2.Header = "Num Matched Played on Stage";
+            col2.Header = "# Matches";
             col2.Binding = new Binding("numTimesPlayedOnStage");
             col2.Width = 50;
             OverallStageWinDataGrid.Columns.Add(col2);
 
             DataGridTextColumn col3 = new DataGridTextColumn();
-            col3.Header = "Win Rate";
+            col3.Header = "Win %";
             col3.Binding = new Binding("winRate");
             col3.Width = 50;
             OverallStageWinDataGrid.Columns.Add(col3);
@@ -223,8 +223,6 @@ group by charname
                 numTimesPlayedOnStage = reader.GetInt32(1),
                 winRate = Math.Round(reader.GetDouble(2), 2, MidpointRounding.AwayFromZero)
             });
-            
-
         }
 
         private void addCharWinRateGridRow(NpgsqlDataReader reader)
@@ -239,9 +237,7 @@ group by charname
                 winRate = Math.Round(reader.GetDouble(2),2,MidpointRounding.AwayFromZero)
 
             });
-
-
-
+            
         }
 
         private void addTagUsageGridRow(NpgsqlDataReader reader)
@@ -251,8 +247,7 @@ group by charname
                 item = reader.GetString(0),
                 uses = reader.GetInt32(1)
             });
-
-
+            
         }
 
         private void addColorUsageGridRow(NpgsqlDataReader reader)
@@ -262,8 +257,7 @@ group by charname
                 itemInt = reader.GetInt32(0),
                 uses = reader.GetInt32(1)
             });
-
-
+            
         }
 
         private void updateCharOverallLabel(NpgsqlDataReader reader)
@@ -402,11 +396,11 @@ from
 (select * from
 (select matchid from
 (select distinct(matchid) from tourneysingleschars
-where charname = '{CharOverallComboBox.SelectedItem.ToString()}') ass natural join tourneysingleschars
+where charname = '{CharOverallComboBox.SelectedItem.ToString()}') matchcontainsselected natural join tourneysingleschars
 group by matchid
-having count(distinct(didwin))=2) goblin
+having count(distinct(didwin))=2) completedmatches
 natural join tourneysingleschars
-where charname <> '{CharOverallComboBox.SelectedItem.ToString()}') allotherchars
+where charname <> '{CharOverallComboBox.SelectedItem.ToString()}') opponentchars
 group by charname
 order by winrate desc
 
