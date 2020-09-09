@@ -78,7 +78,7 @@
         </TabControl>
         <DockPanel HorizontalAlignment="Left" Height="20" LastChildFill="False" VerticalAlignment="Top" Width="1394" Margin="0,0,-0.4,0">
             <Menu Width="1394" Margin="0,0,0,0.6">
-                <MenuItem Header="File" Height="20" Width="40">
+                <MenuItem Header="File" Height="20" Width="40" Click="MenuItem_Click_1">
                     <MenuItem Header="Add Files to Database" HorizontalAlignment="Left" Height="20" Width="200" Click="MenuItem_Click"/>
                 </MenuItem>
                 <MenuItem Header="Help" Height="20" Width="40"/>

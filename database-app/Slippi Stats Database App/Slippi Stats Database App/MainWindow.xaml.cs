@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 // below using statements added for the project. 
 using Npgsql;
 using System.IO;
+//using System.Windows.Forms;
 
 
 namespace Slippi_Stats_Database_App
@@ -161,14 +162,41 @@ namespace Slippi_Stats_Database_App
         {
             // add files to database button was just clicked. 
 
-            // use an OpenFileDialog to select a directory
+            
 
-            // use the selected directory to then call the python code to populate the database recursively through the directory tree. 
+            
 
             // NOTE: While the database population is occuring, disable the main window, popup a small window that says "Database Population in progress" with a loading bar of some sort. add a cancel button to the popup
             // when population has finished or been cancelled, re-enable the main window and remove the popup window. 
 
             Console.Write("Add Files to DB Button clicked.");
+
+            // use an OpenFileDialog to select a directory
+
+            
+            //System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog();
+
+            //openFileDialog.ShowDialog();
+
+            System.Windows.Forms.FolderBrowserDialog folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+
+            if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+
+                string dirPath = folderBrowserDialog.SelectedPath;
+
+                // use the selected directory to then call the python code to populate the database recursively through the directory tree. 
+
+
+
+
+
+            }
+
+
+
+
+
 
 
 
@@ -450,6 +478,11 @@ having count( distinct( charname)) = 2
             // calculate overall character stats button. 
 
             CalculateOverallCharStatsButtonClicked();
+        }
+
+        private void MenuItem_Click_1(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
